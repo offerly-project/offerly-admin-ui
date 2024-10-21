@@ -17,7 +17,7 @@ export class UserStore {
 	}
 
 	login(username: string, password: string) {
-		axiosInstance
+		return axiosInstance
 			.post(
 				"/auth/login/admin",
 				{

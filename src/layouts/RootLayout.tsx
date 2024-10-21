@@ -1,3 +1,4 @@
+import { Toaster } from "@/components/ui/toaster";
 import { Outlet } from "react-router-dom";
 
 type Props = {};
@@ -9,6 +10,7 @@ const RootLayout = (props: Props) => {
 				<h1 className="font-bold text-white">Offerly</h1>
 			</div>
 			<Outlet />
+			<Toaster />
 		</>
 	);
 };
