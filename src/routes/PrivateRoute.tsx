@@ -1,6 +1,7 @@
+import HomeLayout from "@/layouts/HomeLayout";
 import { userStore } from "@/stores";
 import { observer } from "mobx-react-lite";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 type Props = {};
 
@@ -10,7 +11,7 @@ const PrivateRoute = observer((props: Props) => {
 		return <Navigate to="/login" />;
 	}
 
-	return <Outlet />;
+	return <HomeLayout />;
 });
 
 export default PrivateRoute;

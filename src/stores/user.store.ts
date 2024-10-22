@@ -3,14 +3,14 @@ import { AxiosResponse } from "axios";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 
-type User = {
+interface IUser {
 	username: string;
-};
+}
 
 export class UserStore {
 	rootStore: RootStore;
-	authenticated: boolean = false;
-	user!: User;
+	authenticated: boolean = true;
+	user!: IUser;
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);

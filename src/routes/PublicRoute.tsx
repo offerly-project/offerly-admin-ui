@@ -7,7 +7,7 @@ type Props = {};
 const PublicRoute = observer((props: Props) => {
 	const { authenticated } = userStore();
 	if (authenticated) {
-		return <Navigate to={"/home"} />;
+		return <Navigate to={"/banks"} />;
 	}
 
 	return <Outlet />;
