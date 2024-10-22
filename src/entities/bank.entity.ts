@@ -2,7 +2,7 @@ import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
 import { makeAutoObservable, runInAction } from "mobx";
 
-export type BankType = "regular" | "digital" | "digital-wawllet";
+export type BankType = "regular" | "digital" | "digital-wallet";
 
 export interface IBank {
 	country: string;
@@ -35,7 +35,7 @@ export class Bank {
 	}
 
 	updateStatus = (status: ActiveStatusType) => {
-		axiosInstance.patch(`/banks/${this.id}`, { status }).then(() => {
+		return axiosInstance.patch(`/banks/${this.id}`, { status }).then(() => {
 			runInAction(() => {
 				this.status = status;
 			});

@@ -13,7 +13,7 @@ export class BanksStore {
 		makeAutoObservable(this);
 	}
 
-	fetchBanks = () => {
+	fetchBanks = async () => {
 		return axiosInstance.get("/banks").then((res: AxiosResponse<IBank[]>) => {
 			this._banks = res.data.map((bank) => new Bank(bank));
 		});
@@ -21,10 +21,6 @@ export class BanksStore {
 
 	updateFilter = (query: string) => {
 		this._query = query;
-	};
-
-	shouldFetch = () => {
-		return this._banks === null;
 	};
 
 	get banks() {
@@ -38,4 +34,17 @@ export class BanksStore {
 		}
 		return banks;
 	}
+
+	fetchBank = async (id: string) => {
+		return axiosInstance.get(`/banks/${id}`).then((res) => {
+			return new Bank(res.data);
+		});
+	};
+
+	createBank = async (bank: Partial<IBank>) => {
+		return axiosInstance.post("/banks", bank).then(async (res) => {
+			const bank = await this.fetchBank(res.data.id);
+			this._banks?.push(bank);
+		});
+	};
 }

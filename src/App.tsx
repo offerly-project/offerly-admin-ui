@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
@@ -9,6 +10,7 @@ import RootLayout from "./layouts/RootLayout";
 import LoginPage from "./pages/Login/LoginPage";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import { CountriesService } from "./services/countries.service";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
@@ -24,6 +26,9 @@ const router = createBrowserRouter(
 );
 
 function App() {
+	useEffect(() => {
+		CountriesService.populate();
+	}, []);
 	return <RouterProvider router={router} />;
 }
 

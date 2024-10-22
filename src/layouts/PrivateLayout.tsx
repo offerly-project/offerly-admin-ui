@@ -1,3 +1,4 @@
+import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator";
 import {
 	Sidebar,
 	SidebarContent,
@@ -10,7 +11,7 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
-import { userStore } from "@/stores";
+import { banksStore, userStore } from "@/stores";
 import {
 	faBank,
 	faCreditCard,
@@ -18,16 +19,33 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
+import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
 type Props = {};
 
-const HomeLayout = observer((props: Props) => {
+const PrivateLayout = observer((props: Props) => {
 	const { user } = userStore();
 	const navigate = useNavigate();
 	const routeHandler = (str: string) => () => {
 		navigate(str);
 	};
+	const [loading, setLoading] = useState(true);
+
+	useEffect(() => {
+		Promise.all([banksStore().fetchBanks()]).finally(() => {
+			setLoading(false);
+		});
+	}, []);
+
+	if (loading) {
+		return (
+			<div style={{ height: "100vh" }}>
+				<LoadingIndicator fullHeightAndWidth />
+			</div>
+		);
+	}
+
 	return (
 		<SidebarProvider>
 			<div className="flex-row align-middle">
@@ -82,4 +100,4 @@ const HomeLayout = observer((props: Props) => {
 	);
 });
 
-export default HomeLayout;
+export default PrivateLayout;
