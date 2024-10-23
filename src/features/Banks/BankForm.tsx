@@ -17,6 +17,7 @@ import { BankType } from "@/entities/bank.entity";
 import { CountriesService } from "@/services/countries.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BANK_TYPES_LIST } from "./bank.constants";
@@ -42,7 +43,8 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 			values: initialValues,
 		});
 
-	const submittable = isEmpty(formState.errors);
+	const [uploading, setUploading] = useState(false);
+	const submittable = !uploading && isEmpty(formState.errors);
 
 	return (
 		<DialogContent
@@ -61,6 +63,9 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 						path={getValues().logo}
 						onChange={(path) => {
 							setValue("logo", path);
+						}}
+						onUploadStateChange={(uploading) => {
+							setUploading(uploading);
 						}}
 					/>
 					<Input

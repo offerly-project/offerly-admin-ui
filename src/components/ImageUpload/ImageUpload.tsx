@@ -12,9 +12,15 @@ type Props = {
 	pathPrefix: string;
 	path?: string;
 	onChange: (path: string) => void;
+	onUploadStateChange?: (uploading: boolean) => void;
 };
 
-const ImageUpload = ({ pathPrefix, path, onChange }: Props) => {
+const ImageUpload = ({
+	pathPrefix,
+	path,
+	onChange,
+	onUploadStateChange,
+}: Props) => {
 	const [loading, setLoading] = useState(true);
 	const inputRef = useRef<HTMLInputElement>(null);
 
@@ -40,6 +46,11 @@ const ImageUpload = ({ pathPrefix, path, onChange }: Props) => {
 	}, [path]);
 
 	const [uploading, setUploading] = useState(false);
+	useEffect(() => {
+		if (onUploadStateChange) {
+			onUploadStateChange(uploading);
+		}
+	}, [uploading]);
 
 	const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
 		const formData = new FormData();

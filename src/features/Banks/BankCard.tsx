@@ -1,3 +1,4 @@
+import CardImage from "@/components/Image/CardImage";
 import StatusSwitch from "@/components/StatusSwitch/StatusSwitch";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -44,10 +45,13 @@ const BankCard = observer(({ bank }: Props) => {
 	return (
 		<Card className="w-60">
 			<CardHeader className="flex-row">
-				<img
-					className="h-20 w-20 rounded-lg"
-					src={formatAssetPath(bank.logo) + "?" + new Date().getTime()}
-					alt={bank.name + " logo"}
+				<CardImage
+					alt="B"
+					src={
+						bank.logo
+							? formatAssetPath(bank.logo) + "?" + new Date().getTime()
+							: ""
+					}
 				/>
 			</CardHeader>
 			<CardContent className="space-y-4 ">
