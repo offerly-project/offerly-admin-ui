@@ -9,7 +9,7 @@ interface IUser {
 
 export class UserStore {
 	rootStore: RootStore;
-	authenticated: boolean = true;
+	authenticated: boolean = false;
 	user!: IUser;
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;

@@ -13,21 +13,18 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { axiosInstance } from "@/configs/configs";
 import { BankType } from "@/entities/bank.entity";
-import { useToast } from "@/hooks/use-toast";
 import { CountriesService } from "@/services/countries.service";
-import { banksStore } from "@/stores";
-import { createErrorToastObject } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BANK_TYPES_LIST } from "./bank.constants";
 
 type Props = {
-	closeDialog: () => void;
+	initialValues?: BankFormValues;
+	onSubmit: (values: BankFormValues) => Promise<void>;
 };
 
 const schema = z.object({
@@ -36,38 +33,24 @@ const schema = z.object({
 	country: z.string({ message: "Country is required" }).min(1),
 });
 
-type FormValues = z.infer<typeof schema>;
+export type BankFormValues = z.infer<typeof schema> & { logo: File | null };
 
-const NewBankForm = ({ closeDialog }: Props) => {
-	const { register, handleSubmit, formState, reset, setValue } =
-		useForm<FormValues>({
+const BankForm = ({ initialValues, onSubmit }: Props) => {
+	const { register, handleSubmit, formState, reset, setValue, getValues } =
+		useForm<BankFormValues>({
 			resolver: zodResolver(schema),
+			values: initialValues,
 		});
 
-	const { toast } = useToast();
 	const submittable = isEmpty(formState.errors);
 
-	const [logo, setLogo] = useState<File | null>(null);
+	const [logo, setLogo] = useState<File | null>(initialValues?.logo || null);
 
-	const onSubmit = async (values: FormValues) => {
-		try {
-			const path = `/banks/${values.name.toLowerCase()}`;
-			if (logo) {
-				const formData = new FormData();
-				formData.append("image", logo);
-				formData.append("path", path);
-				await axiosInstance.post("/uploads/images", formData);
-			}
-			banksStore().createBank({
-				...values,
-				logo: path,
-			});
-			toast({ description: "Bank created" });
-			closeDialog();
-		} catch (e: any) {
-			toast(createErrorToastObject(e));
+	useEffect(() => {
+		if (initialValues?.logo) {
+			setLogo(initialValues.logo);
 		}
-	};
+	}, [initialValues?.logo]);
 
 	return (
 		<DialogContent
@@ -98,6 +81,7 @@ const NewBankForm = ({ closeDialog }: Props) => {
 						onValueChange={(value) => {
 							setValue("type", value as BankType, { shouldValidate: true });
 						}}
+						value={getValues().type}
 					>
 						<SelectTrigger error={formState.errors.type?.message}>
 							<SelectValue placeholder="Type" />
@@ -109,6 +93,7 @@ const NewBankForm = ({ closeDialog }: Props) => {
 						</SelectContent>
 					</Select>
 					<Select
+						value={getValues().country}
 						onValueChange={(value) =>
 							setValue("country", value, { shouldValidate: true })
 						}
@@ -125,9 +110,9 @@ const NewBankForm = ({ closeDialog }: Props) => {
 					<Button
 						disabled={!submittable}
 						variant={"outline"}
-						onClick={handleSubmit(onSubmit)}
+						onClick={handleSubmit((data) => onSubmit({ ...data, logo }))}
 					>
-						Create
+						{initialValues ? "Update" : "Create"}
 					</Button>
 				</div>
 			</DialogHeader>
@@ -135,4 +120,4 @@ const NewBankForm = ({ closeDialog }: Props) => {
 	);
 };
 
-export default NewBankForm;
+export default BankForm;

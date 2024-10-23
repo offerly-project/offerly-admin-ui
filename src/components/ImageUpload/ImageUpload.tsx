@@ -11,9 +11,10 @@ type Props = {
 
 const ImageUpload = ({ onChange, value }: Props) => {
 	const inputRef = useRef<HTMLInputElement>(null);
+
 	const imageUrl = useMemo(() => {
 		if (value) {
-			const blob = new Blob([value], { type: value.type });
+			const blob = new Blob([value]);
 			return URL.createObjectURL(blob);
 		} else {
 			return null;

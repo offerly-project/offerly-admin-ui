@@ -52,7 +52,7 @@ const PrivateLayout = observer((props: Props) => {
 				<Sidebar>
 					<SidebarHeader>
 						<p className="text-gray-300 text-center font-bold text-2xl">
-							{"Jad"}
+							{user.username}
 						</p>
 					</SidebarHeader>
 					<SidebarContent>

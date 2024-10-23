@@ -1,6 +1,7 @@
 import { axiosInstance } from "@/configs/configs";
 import { Bank, IBank } from "@/entities/bank.entity";
 import { AxiosResponse } from "axios";
+import { isNumber } from "lodash";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 
@@ -45,6 +46,17 @@ export class BanksStore {
 		return axiosInstance.post("/banks", bank).then(async (res) => {
 			const bank = await this.fetchBank(res.data.id);
 			this._banks?.push(bank);
+		});
+	};
+
+	updateBank = async (id: string, bank: Partial<IBank>) => {
+		return axiosInstance.patch(`/banks/${id}`, bank).then(async () => {
+			const bank = await this.fetchBank(id);
+			const bankIndex = this._banks?.findIndex((b) => b.id === id);
+
+			if (isNumber(bankIndex) && bankIndex >= 0 && this._banks) {
+				this._banks[bankIndex].updateBank(bank);
+			}
 		});
 	};
 }
