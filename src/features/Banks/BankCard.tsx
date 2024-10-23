@@ -2,7 +2,6 @@ import StatusSwitch from "@/components/StatusSwitch/StatusSwitch";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { axiosInstance } from "@/configs/configs";
 import { Bank } from "@/entities/bank.entity";
 import { useToast } from "@/hooks/use-toast";
 import { banksStore } from "@/stores";
@@ -33,20 +32,9 @@ const BankCard = observer(({ bank }: Props) => {
 
 	const { toast } = useToast();
 
-	const onUpdateBankSubmit = async ({ logo, ...values }: BankFormValues) => {
+	const onUpdateBankSubmit = async (values: BankFormValues) => {
 		try {
-			const path = `/banks/${values.name.toLowerCase()}.png`;
-			if (logo) {
-				const formData = new FormData();
-				formData.append("image", logo);
-				formData.append("path", path);
-				axiosInstance.post("/uploads/images", formData);
-			}
-
-			banksStore().updateBank(bank.id, {
-				...values,
-				logo: logo ? path : bank.logo,
-			});
+			banksStore().updateBank(bank.id, values);
 			toast({ description: "Bank updated" });
 			setOpen(false);
 		} catch (e: any) {
@@ -84,7 +72,7 @@ const BankCard = observer(({ bank }: Props) => {
 								name: bank.name,
 								country: bank.country,
 								type: bank.type,
-								logo: bank.logoFile,
+								logo: bank.logo,
 							}}
 							onSubmit={onUpdateBankSubmit}
 						/>

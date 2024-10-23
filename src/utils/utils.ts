@@ -1,6 +1,7 @@
 import { BankType } from "@/entities/bank.entity";
 import { Toast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
+import { v4 } from "uuid";
 
 export const createErrorToastObject = (err: Error): Toast => {
 	const defaultErrorMessage = "An error has occurred";
@@ -37,3 +38,5 @@ export const formatBankType = (type: BankType) => {
 			return "Regular";
 	}
 };
+
+export const randomId = () => v4();

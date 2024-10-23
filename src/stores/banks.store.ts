@@ -43,6 +43,9 @@ export class BanksStore {
 	};
 
 	createBank = async (bank: Partial<IBank>) => {
+		if (!bank.logo) {
+			delete bank.logo;
+		}
 		return axiosInstance.post("/banks", bank).then(async (res) => {
 			const bank = await this.fetchBank(res.data.id);
 			this._banks?.push(bank);
@@ -50,6 +53,9 @@ export class BanksStore {
 	};
 
 	updateBank = async (id: string, bank: Partial<IBank>) => {
+		if (!bank.logo) {
+			delete bank.logo;
+		}
 		return axiosInstance.patch(`/banks/${id}`, bank).then(async () => {
 			const bank = await this.fetchBank(id);
 			const bankIndex = this._banks?.findIndex((b) => b.id === id);

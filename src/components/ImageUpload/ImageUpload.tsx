@@ -1,33 +1,46 @@
+import { axiosInstance } from "@/configs/configs";
+import { createFileObject, formatAssetPath, randomId } from "@/utils/utils";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useMemo, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
 
 type Props = {
-	onChange: (file: File) => void;
-	value?: File | null;
+	pathPrefix: string;
+	path?: string;
+	onChange: (path: string) => void;
 };
 
-const ImageUpload = ({ onChange, value }: Props) => {
+const ImageUpload = ({ pathPrefix, path, onChange }: Props) => {
 	const inputRef = useRef<HTMLInputElement>(null);
 
-	const imageUrl = useMemo(() => {
-		if (value) {
-			const blob = new Blob([value]);
-			return URL.createObjectURL(blob);
-		} else {
-			return null;
-		}
-	}, [value]);
+	const [imageUrl, setImageUrl] = useState<string | null>(null);
 
 	useEffect(() => {
-		if (inputRef.current) {
-			if (!value) {
-				inputRef.current.value = null as unknown as string;
-			}
+		if (!path) {
+			setImageUrl(null);
+			return;
 		}
-	}, [value]);
+		const fullPath = formatAssetPath(path);
+		createFileObject(fullPath).then((file) => {
+			if (file) {
+				const url = URL.createObjectURL(file);
+				setImageUrl(url);
+			}
+		});
+	}, [path]);
+
+	const onUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+		const formData = new FormData();
+		const image = e.target.files![0];
+		const storePath = path ? path : `${pathPrefix}/${randomId()}.png`;
+		formData.append("image", image);
+		formData.append("path", storePath);
+		axiosInstance.post("/uploads/images", formData);
+		setImageUrl(URL.createObjectURL(image));
+		onChange(storePath);
+	};
 
 	return (
 		<Card
@@ -51,9 +64,7 @@ const ImageUpload = ({ onChange, value }: Props) => {
 			)}
 			<input
 				ref={inputRef}
-				onChange={(e) => {
-					onChange(e.target.files![0]);
-				}}
+				onChange={onUpload}
 				type="file"
 				className="hidden"
 			/>

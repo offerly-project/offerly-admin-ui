@@ -1,6 +1,5 @@
 import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
-import { createFileObject, formatAssetPath } from "@/utils/utils";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export type BankType = "regular" | "digital" | "digital-wallet";
@@ -23,7 +22,6 @@ export class Bank {
 	status: ActiveStatusType;
 	cards: string[];
 	id: string;
-	logoFile: File | null = null;
 
 	constructor(bank: IBank) {
 		this.country = bank.country;
@@ -33,11 +31,7 @@ export class Bank {
 		this.status = bank.status;
 		this.cards = bank.cards;
 		this.id = bank.id;
-		createFileObject(formatAssetPath(this.logo)).then((file) => {
-			runInAction(() => {
-				this.logoFile = file;
-			});
-		});
+
 		makeAutoObservable(this);
 	}
 
@@ -49,12 +43,6 @@ export class Bank {
 		this.status = bank.status || this.status;
 		this.cards = bank.cards || this.cards;
 		this.id = bank.id || this.id;
-		createFileObject(formatAssetPath(this.logo)).then((file) => {
-			runInAction(() => {
-				this.logoFile = file;
-				console.log(this.logoFile);
-			});
-		});
 	};
 
 	updateStatus = (status: ActiveStatusType) => {

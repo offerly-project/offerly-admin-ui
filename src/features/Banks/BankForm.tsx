@@ -17,7 +17,6 @@ import { BankType } from "@/entities/bank.entity";
 import { CountriesService } from "@/services/countries.service";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
-import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { BANK_TYPES_LIST } from "./bank.constants";
@@ -31,9 +30,10 @@ const schema = z.object({
 	name: z.string().min(1, { message: "Bank name is required" }),
 	type: z.enum(["digital", "regular", "digital-wallet"]),
 	country: z.string({ message: "Country is required" }).min(1),
+	logo: z.string().optional(),
 });
 
-export type BankFormValues = z.infer<typeof schema> & { logo: File | null };
+export type BankFormValues = z.infer<typeof schema>;
 
 const BankForm = ({ initialValues, onSubmit }: Props) => {
 	const { register, handleSubmit, formState, reset, setValue, getValues } =
@@ -44,20 +44,11 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 
 	const submittable = isEmpty(formState.errors);
 
-	const [logo, setLogo] = useState<File | null>(initialValues?.logo || null);
-
-	useEffect(() => {
-		if (initialValues?.logo) {
-			setLogo(initialValues.logo);
-		}
-	}, [initialValues?.logo]);
-
 	return (
 		<DialogContent
 			className="w-96"
 			onCloseAutoFocus={() => {
 				reset();
-				setLogo(null);
 			}}
 		>
 			<DialogHeader>
@@ -66,9 +57,10 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 				</DialogHeader>
 				<div className="flex flex-col gap-4 pt-4">
 					<ImageUpload
-						value={logo}
-						onChange={(file) => {
-							setLogo(file);
+						pathPrefix={"/banks"}
+						path={getValues().logo}
+						onChange={(path) => {
+							setValue("logo", path);
 						}}
 					/>
 					<Input
@@ -110,7 +102,7 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 					<Button
 						disabled={!submittable}
 						variant={"outline"}
-						onClick={handleSubmit((data) => onSubmit({ ...data, logo }))}
+						onClick={handleSubmit((data) => onSubmit(data))}
 					>
 						{initialValues ? "Update" : "Create"}
 					</Button>

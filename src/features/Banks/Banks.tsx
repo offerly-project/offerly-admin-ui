@@ -1,6 +1,5 @@
 import ActionsBox from "@/components/ActionsBox/ActionsBox";
 import { Dialog } from "@/components/ui/dialog";
-import { axiosInstance } from "@/configs/configs";
 import { useToast } from "@/hooks/use-toast";
 import { banksStore } from "@/stores";
 import { createErrorToastObject } from "@/utils/utils";
@@ -15,20 +14,9 @@ const Banks = observer((props: Props) => {
 	const { banks, updateFilter } = banksStore();
 	const [open, setOpen] = useState(false);
 	const { toast } = useToast();
-	const onNewBankSubmit = async ({ logo, ...values }: BankFormValues) => {
+	const onNewBankSubmit = async (values: BankFormValues) => {
 		try {
-			const path = `/banks/${values.name.toLowerCase()}.png`;
-			if (logo) {
-				const formData = new FormData();
-				formData.append("image", logo);
-				formData.append("path", path);
-				await axiosInstance.post("/uploads/images", formData);
-			}
-
-			banksStore().createBank({
-				...values,
-				logo: logo ? path : undefined,
-			});
+			banksStore().createBank(values);
 			toast({ description: "Bank created" });
 			setOpen(false);
 		} catch (e: any) {
