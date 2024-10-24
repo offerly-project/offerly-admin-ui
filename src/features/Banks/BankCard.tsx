@@ -35,7 +35,7 @@ const BankCard = observer(({ bank }: Props) => {
 
 	const onUpdateBankSubmit = async (values: BankFormValues) => {
 		try {
-			banksStore().updateBank(bank.id, values);
+			await banksStore().updateBank(bank.id, values);
 			toast({ description: "Bank updated" });
 			setOpen(false);
 		} catch (e: any) {

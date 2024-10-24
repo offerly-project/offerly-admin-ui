@@ -1,4 +1,4 @@
-import ActionsBox from "@/components/ActionsBox/ActionsBox";
+import Grid from "@/components/Grid/Grid";
 import { Dialog } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { banksStore } from "@/stores";
@@ -7,6 +7,7 @@ import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import BankCard from "./BankCard";
 import BankForm, { BankFormValues } from "./BankForm";
+import BanksToolbar from "./BanksToobar";
 
 type Props = {};
 
@@ -16,7 +17,7 @@ const Banks = observer((props: Props) => {
 	const { toast } = useToast();
 	const onNewBankSubmit = async (values: BankFormValues) => {
 		try {
-			banksStore().createBank(values);
+			await banksStore().createBank(values);
 			toast({ description: "Bank created" });
 			setOpen(false);
 		} catch (e: any) {
@@ -27,15 +28,15 @@ const Banks = observer((props: Props) => {
 	return (
 		<div className="flex-col space-y-5">
 			<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-				<ActionsBox onSearch={updateFilter} />
+				<BanksToolbar onSearch={updateFilter} />
 
 				<BankForm onSubmit={onNewBankSubmit} />
 			</Dialog>
-			<div className="flex gap-10 flex-row flex-wrap items-center justify-evenly">
+			<Grid>
 				{banks.map((bank) => (
 					<BankCard key={bank.id} bank={bank} />
 				))}
-			</div>
+			</Grid>
 		</div>
 	);
 });

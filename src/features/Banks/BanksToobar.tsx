@@ -1,17 +1,18 @@
+import Toolbar from "@/components/Toolbar/Toolbar";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button } from "../ui/button";
-import { DialogTrigger } from "../ui/dialog";
-import { Input } from "../ui/input";
+import { Button } from "../../components/ui/button";
+import { DialogTrigger } from "../../components/ui/dialog";
+import { Input } from "../../components/ui/input";
 
 type Props = {
 	onAdd?: () => void;
 	onSearch?: (query: string) => void;
 };
 
-const ActionsBox = ({ onAdd, onSearch }: Props) => {
+const BanksToolbar = ({ onAdd, onSearch }: Props) => {
 	return (
-		<div className="flex-row flex space-x-4">
+		<Toolbar>
 			<DialogTrigger>
 				<Button variant="ghost" onClick={onAdd}>
 					<FontAwesomeIcon icon={faAdd} />
@@ -24,8 +25,8 @@ const ActionsBox = ({ onAdd, onSearch }: Props) => {
 					onSearch?.(e.target.value);
 				}}
 			/>
-		</div>
+		</Toolbar>
 	);
 };
 
-export default ActionsBox;
+export default BanksToolbar;

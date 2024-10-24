@@ -16,6 +16,7 @@ import {
 	faBank,
 	faCreditCard,
 	faGift,
+	faShop,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
@@ -63,7 +64,7 @@ const PrivateLayout = observer((props: Props) => {
 									<SidebarMenuItem>
 										<SidebarMenuButton
 											style={{ height: 50 }}
-											onClick={routeHandler("banks")}
+											onClick={routeHandler("/banks")}
 										>
 											<FontAwesomeIcon icon={faBank} />
 											<span>Banks</span>
@@ -72,7 +73,7 @@ const PrivateLayout = observer((props: Props) => {
 									<SidebarMenuItem>
 										<SidebarMenuButton
 											style={{ height: 50 }}
-											onClick={routeHandler("cards")}
+											onClick={routeHandler("/cards")}
 										>
 											<FontAwesomeIcon icon={faCreditCard} />
 											<span>Cards</span>
@@ -81,10 +82,19 @@ const PrivateLayout = observer((props: Props) => {
 									<SidebarMenuItem>
 										<SidebarMenuButton
 											style={{ height: 50 }}
-											onClick={routeHandler("offers")}
+											onClick={routeHandler("/offers")}
 										>
 											<FontAwesomeIcon icon={faGift} />
 											<span>Offers</span>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+									<SidebarMenuItem>
+										<SidebarMenuButton
+											style={{ height: 50 }}
+											onClick={routeHandler("/stores")}
+										>
+											<FontAwesomeIcon icon={faShop} />
+											<span>Stores</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								</SidebarMenu>
