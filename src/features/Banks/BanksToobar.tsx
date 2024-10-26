@@ -1,4 +1,5 @@
 import Toolbar from "@/components/Toolbar/Toolbar";
+import { banksStore } from "@/stores";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button } from "../../components/ui/button";
@@ -7,10 +8,12 @@ import { Input } from "../../components/ui/input";
 
 type Props = {
 	onAdd?: () => void;
-	onSearch?: (query: string) => void;
 };
 
-const BanksToolbar = ({ onAdd, onSearch }: Props) => {
+const BanksToolbar = ({ onAdd }: Props) => {
+	const onSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+		banksStore().updateFilter(e.target.value);
+	};
 	return (
 		<Toolbar>
 			<DialogTrigger>
@@ -21,9 +24,7 @@ const BanksToolbar = ({ onAdd, onSearch }: Props) => {
 			<Input
 				className="w-100 inline-block"
 				placeholder="Search..."
-				onChange={(e) => {
-					onSearch?.(e.target.value);
-				}}
+				onChange={onSearchChange}
 			/>
 		</Toolbar>
 	);

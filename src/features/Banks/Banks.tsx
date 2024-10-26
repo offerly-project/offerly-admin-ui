@@ -26,9 +26,9 @@ const Banks = observer((props: Props) => {
 	};
 
 	return (
-		<div className="flex-col space-y-5">
+		<div className="flex-col flex space-y-5">
 			<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
-				<BanksToolbar onSearch={updateFilter} />
+				<BanksToolbar onAdd={() => setOpen(true)} />
 
 				<BankForm onSubmit={onNewBankSubmit} />
 			</Dialog>

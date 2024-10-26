@@ -11,7 +11,7 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
-import { banksStore, userStore } from "@/stores";
+import { banksStore, cardsStore, userStore } from "@/stores";
 import {
 	faBank,
 	faCreditCard,
@@ -34,9 +34,11 @@ const PrivateLayout = observer((props: Props) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		Promise.all([banksStore().fetchBanks()]).finally(() => {
-			setLoading(false);
-		});
+		Promise.all([banksStore().fetchBanks(), cardsStore().fetchCards()]).finally(
+			() => {
+				setLoading(false);
+			}
+		);
 	}, []);
 
 	if (loading) {
