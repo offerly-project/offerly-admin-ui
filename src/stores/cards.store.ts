@@ -1,6 +1,8 @@
 import { axiosInstance } from "@/configs/configs";
 import { Card, ICard } from "@/entities/card.entity";
+import { CardFormValues } from "@/features/Cards/CardForm";
 import { AxiosResponse } from "axios";
+import { isNumber } from "lodash";
 import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
@@ -60,4 +62,44 @@ export class CardsStore {
 		}
 		return cards;
 	}
+
+	fetchCard = async (id: string) => {
+		return axiosInstance.get(`/cards/${id}`).then((res) => {
+			return new Card(res.data);
+		});
+	};
+
+	createCard = async (card: CardFormValues) => {
+		const bank = this.rootStore.banksStore.banks.find(
+			(bank) => bank.name === card.bank
+		)!;
+		card.bank = bank.id;
+		return axiosInstance.post("/cards", card).then(async (res) => {
+			const card = await this.fetchCard(res.data.id);
+			runInAction(() => {
+				if (!this._cards[card.bank.id]) {
+					this._cards[card.bank.id] = [];
+				}
+				this._cards[card.bank.id].push(card);
+			});
+		});
+	};
+
+	updateCard = async (id: string, card: Partial<CardFormValues>) => {
+		if (!card.logo) {
+			delete card.logo;
+		}
+		const bank = this.rootStore.banksStore.banks.find(
+			(bank) => bank.name === card.bank
+		)!;
+		card.bank = bank.id;
+		return axiosInstance.patch(`/cards/${id}`, card).then(async () => {
+			const card = await this.fetchCard(id);
+			const bankIndex = this._cards[card.bank.id].findIndex((b) => b.id === id);
+
+			if (isNumber(bankIndex) && bankIndex >= 0 && this._cards[card.bank.id]) {
+				this._cards[card.bank.id][bankIndex].updateCard(card);
+			}
+		});
+	};
 }

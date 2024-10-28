@@ -1,18 +1,26 @@
 import { Card } from "../ui/card";
 
-type Props = { src: string; alt: string };
+type Props = {
+	src: string;
+	alt: string;
+	className?: string;
+	styles?: React.CSSProperties;
+};
 
-const CardImage = ({ src, alt }: Props) => {
+const CardImage = ({ src, alt, className, styles = {} }: Props) => {
 	return (
-		<>
+		<div
+			className={className}
+			style={{ overflow: "hidden", borderRadius: 10, ...styles }}
+		>
 			{src ? (
-				<img className="h-20 w-20 rounded-lg" src={src} alt="logo" />
+				<img className="h-full w-full" src={src} alt="logo" style={styles} />
 			) : (
-				<Card className="h-20 w-20 grid place-items-center">
+				<Card className="h-full w-full grid place-items-center">
 					<p className="font-bold text-2xl">{alt}</p>
 				</Card>
 			)}
-		</>
+		</div>
 	);
 };
 

@@ -2,66 +2,63 @@ import CardImage from "@/components/Image/CardImage";
 import StatusSwitch from "@/components/StatusSwitch/StatusSwitch";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Dialog, DialogTrigger } from "@/components/ui/dialog";
-import { Bank } from "@/entities/bank.entity";
+import { Card as CardEntity } from "@/entities/card.entity";
 import { useToast } from "@/hooks/use-toast";
-import { banksStore } from "@/stores";
-import {
-	createErrorToastObject,
-	formatAssetPath,
-	formatBankType,
-} from "@/utils/utils";
+import { cardsStore } from "@/stores";
+import { createErrorToastObject, formatAssetPath } from "@/utils/utils";
 import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { Dialog, DialogTrigger } from "@radix-ui/react-dialog";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import BankForm, { BankFormValues } from "./BankForm";
+import CardForm, { CardFormValues } from "./CardForm";
 
 type Props = {
-	bank: Bank;
+	card: CardEntity;
 };
 
-const BankCard = observer(({ bank }: Props) => {
+const CardCard = observer(({ card }: Props) => {
 	const onEnable = async () => {
-		await bank.updateStatus("enabled");
+		await card.updateStatus("enabled");
 	};
 	const onDisable = async () => {
-		await bank.updateStatus("disabled");
+		await card.updateStatus("disabled");
 	};
 
 	const [open, setOpen] = useState(false);
-
 	const { toast } = useToast();
 
-	const onUpdateBankSubmit = async (values: BankFormValues) => {
+	const onUpdateCardSubmit = async (values: CardFormValues) => {
 		try {
-			await banksStore().updateBank(bank.id, values);
+			await cardsStore().updateCard(card.id, values);
 			toast({ description: "Bank updated" });
 			setOpen(false);
 		} catch (e: any) {
 			toast(createErrorToastObject(e));
 		}
 	};
+
 	return (
-		<Card className="w-60">
+		<Card>
 			<CardHeader className="flex-row">
 				<CardImage
-					alt="B"
 					className="m-auto"
-					styles={{ height: 150, width: 150 }}
+					styles={{ height: 100, width: 200 }}
+					alt="C"
 					src={
-						bank.logo
-							? formatAssetPath(bank.logo) + "?" + new Date().getTime()
+						card.logo
+							? formatAssetPath(card.logo) + "?" + new Date().getTime()
 							: ""
 					}
 				/>
 			</CardHeader>
 			<CardContent className="space-y-4 ">
-				<p className=" font-bold text-xl">{bank.name}</p>
-				<p className=" text-gray-300">{bank.country}</p>
-				<p className=" text-gray-300">{formatBankType(bank.type)}</p>
+				<p className=" font-bold text-lg">{card.name}</p>
+				<p className=" text-gray-300">{card.scheme}</p>
+				<p className=" text-gray-300">{card.bank.name}</p>
+				<p className=" text-gray-300">{card.grade}</p>
 				<StatusSwitch
-					status={bank.status}
+					status={card.status}
 					onEnable={onEnable}
 					onDisable={onDisable}
 				/>
@@ -73,14 +70,15 @@ const BankCard = observer(({ bank }: Props) => {
 								<FontAwesomeIcon icon={faEdit} />
 							</Button>
 						</DialogTrigger>
-						<BankForm
+						<CardForm
 							initialValues={{
-								name: bank.name,
-								country: bank.country,
-								type: bank.type,
-								logo: bank.logo,
+								name: card.name,
+								scheme: card.scheme,
+								bank: card.bank.name,
+								grade: card.grade,
+								logo: card.logo,
 							}}
-							onSubmit={onUpdateBankSubmit}
+							onSubmit={onUpdateCardSubmit}
 						/>
 					</Dialog>
 				</div>
@@ -89,4 +87,4 @@ const BankCard = observer(({ bank }: Props) => {
 	);
 });
 
-export default BankCard;
+export default CardCard;

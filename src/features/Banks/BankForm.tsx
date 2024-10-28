@@ -1,10 +1,7 @@
+import Form from "@/components/Form/Form";
 import ImageUpload from "@/components/ImageUpload/ImageUpload";
 import { Button } from "@/components/ui/button";
-import {
-	DialogContent,
-	DialogHeader,
-	DialogTitle,
-} from "@/components/ui/dialog";
+import { DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import {
 	Select,
@@ -48,22 +45,19 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 
 	return (
 		<DialogContent
-			className="w-96"
 			onCloseAutoFocus={() => {
 				reset();
 			}}
 		>
-			<DialogHeader>
-				<DialogHeader>
-					<DialogTitle>New Bank</DialogTitle>
-				</DialogHeader>
-				<div className="flex flex-col gap-4 pt-4">
+			<>
+				<Form>
 					<ImageUpload
 						pathPrefix={"/banks"}
 						path={getValues().logo}
 						onChange={(path) => {
 							setValue("logo", path);
 						}}
+						dims={{ height: 400, width: 400 }}
 						onUploadStateChange={(uploading) => {
 							setUploading(uploading);
 						}}
@@ -111,8 +105,8 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 					>
 						{initialValues ? "Update" : "Create"}
 					</Button>
-				</div>
-			</DialogHeader>
+				</Form>
+			</>
 		</DialogContent>
 	);
 };

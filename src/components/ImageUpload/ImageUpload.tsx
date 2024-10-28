@@ -2,7 +2,7 @@ import { axiosInstance } from "@/configs/configs";
 import { createFileObject, formatAssetPath, randomId } from "@/utils/utils";
 import { faUpload } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
@@ -13,6 +13,10 @@ type Props = {
 	path?: string;
 	onChange: (path: string) => void;
 	onUploadStateChange?: (uploading: boolean) => void;
+	dims?: {
+		height: number;
+		width: number;
+	};
 };
 
 const ImageUpload = ({
@@ -20,6 +24,7 @@ const ImageUpload = ({
 	path,
 	onChange,
 	onUploadStateChange,
+	dims,
 }: Props) => {
 	const [loading, setLoading] = useState(true);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -58,18 +63,28 @@ const ImageUpload = ({
 		const storePath = path ? path : `${pathPrefix}/${randomId()}.png`;
 		formData.append("image", image);
 		formData.append("path", storePath);
+		if (dims) {
+			formData.append("dims", `${dims.width}x${dims.height}`);
+		}
 		setUploading(true);
 		axiosInstance.post("/uploads/images", formData).then(() => {
 			setUploading(false);
+			onChange(storePath);
 		});
 		setImageUrl(URL.createObjectURL(image));
-		onChange(storePath);
 	};
+
+	const [width, height] = useMemo(() => {
+		if (dims) {
+			return [dims.width * 0.75, dims.height * 0.75];
+		}
+		return [250, 250];
+	}, [dims]);
 
 	if (loading) {
 		return (
 			<Card
-				style={{ height: 250, width: 250 }}
+				style={{ height, width }}
 				className="m-auto p-1 grid place-items-center relative"
 			></Card>
 		);
@@ -77,7 +92,7 @@ const ImageUpload = ({
 
 	return (
 		<Card
-			style={{ height: 250, width: 250 }}
+			style={{ height, width }}
 			className="m-auto p-1 grid place-items-center relative"
 			onClick={() => inputRef.current?.click()}
 		>
@@ -85,7 +100,11 @@ const ImageUpload = ({
 				<>
 					<img
 						src={imageUrl}
-						style={{ height: 200, width: 200, opacity: uploading ? 0.5 : 1 }}
+						style={{
+							height: height - 50,
+							width: width - 50,
+							opacity: uploading ? 0.5 : 1,
+						}}
 						className="rounded-lg"
 					/>
 					{uploading && (

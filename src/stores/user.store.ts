@@ -9,8 +9,10 @@ interface IUser {
 
 export class UserStore {
 	rootStore: RootStore;
-	authenticated: boolean = false;
-	user!: IUser;
+	authenticated: boolean = true;
+	user!: IUser = {
+		username: "jad",
+	};
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);

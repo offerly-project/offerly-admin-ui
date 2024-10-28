@@ -1,5 +1,6 @@
+import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { IBank } from "./bank.entity";
 
 export interface ICard {
@@ -19,7 +20,7 @@ export class Card {
 	logo: string;
 	grade: string;
 	scheme: string;
-	status: string;
+	status: ActiveStatusType;
 	offers: string[];
 	id: string;
 
@@ -34,4 +35,22 @@ export class Card {
 		this.id = card.id;
 		makeAutoObservable(this);
 	}
+	updateStatus = async (status: ActiveStatusType) => {
+		return axiosInstance.patch(`/cards/${this.id}`, { status }).then(() => {
+			runInAction(() => {
+				this.status = status;
+			});
+		});
+	};
+
+	updateCard = async (card: Partial<ICard>) => {
+		this.name = card.name || this.name;
+		this.bank = card.bank || this.bank;
+		this.logo = card.logo || this.logo;
+		this.grade = card.grade || this.grade;
+		this.scheme = card.scheme || this.scheme;
+		this.status = card.status || this.status;
+		this.offers = card.offers || this.offers;
+		this.id = card.id || this.id;
+	};
 }

@@ -36,6 +36,10 @@ export class BanksStore {
 		return banks;
 	}
 
+	get banksList() {
+		return this._banks?.map((bank) => bank.name) || [];
+	}
+
 	fetchBank = async (id: string) => {
 		return axiosInstance.get(`/banks/${id}`).then((res) => {
 			return new Bank(res.data);
