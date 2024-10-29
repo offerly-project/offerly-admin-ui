@@ -2,7 +2,6 @@ import { axiosInstance } from "@/configs/configs";
 import { Card, ICard } from "@/entities/card.entity";
 import { CardFormValues } from "@/features/Cards/CardForm";
 import { AxiosResponse } from "axios";
-import { isNumber } from "lodash";
 import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
@@ -17,7 +16,7 @@ export class CardsStore {
 		bank: "All",
 		search: "",
 	};
-	private _cards: Record<string, Card[]> = {};
+	private _cards: Record<string, Card> = {};
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -37,69 +36,63 @@ export class CardsStore {
 			.get("/cards")
 			.then((res: AxiosResponse<ICard[]>) => res.data);
 		runInAction(() => {
-			this._cards = cards.reduce((acc, card) => {
-				if (!acc[card.bank.id]) {
-					acc[card.bank.id] = [];
-				}
-				acc[card.bank.id].push(new Card(card));
+			this._cards = cards.reduce((acc, cardData) => {
+				const card = new Card(cardData);
+				acc[card.id] = card;
 				return acc;
-			}, {} as Record<string, Card[]>);
+			}, {} as Record<string, Card>);
 		});
 	};
 
 	get cards() {
-		if (!this.query.bank && !this.query.search) {
-			return Object.values(this._cards).flat();
-		}
-		let cards: Card[] = Object.values(this._cards).flat();
+		let filteredCards = Object.values(this._cards);
+
 		if (this.query.bank && this.query.bank !== "All") {
-			cards = cards.filter((card) => card.bank.name === this.query.bank);
+			filteredCards = filteredCards.filter(
+				(card) => card.bank.name === this.query.bank
+			);
 		}
 		if (this.query.search) {
-			cards = cards.filter((card) =>
+			filteredCards = filteredCards.filter((card) =>
 				card.name.toLowerCase().includes(this.query.search.toLowerCase())
 			);
 		}
-		return cards;
+		return filteredCards;
 	}
 
 	fetchCard = async (id: string) => {
-		return axiosInstance.get(`/cards/${id}`).then((res) => {
-			return new Card(res.data);
+		const res = await axiosInstance.get(`/cards/${id}`);
+		const card = new Card(res.data);
+		runInAction(() => {
+			this._cards[id] = card;
+		});
+		return card;
+	};
+
+	createCard = async (cardFormData: CardFormValues) => {
+		const bank = this.rootStore.banksStore.banks.find(
+			(b) => b.name === cardFormData.bank
+		)!;
+		cardFormData.bank = bank.id;
+
+		const res = await axiosInstance.post("/cards", cardFormData);
+		const newCard = await this.fetchCard(res.data.id);
+		runInAction(() => {
+			this._cards[newCard.id] = newCard;
 		});
 	};
 
-	createCard = async (card: CardFormValues) => {
+	updateCard = async (id: string, cardData: Partial<CardFormValues>) => {
+		if (!cardData.logo) delete cardData.logo;
 		const bank = this.rootStore.banksStore.banks.find(
-			(bank) => bank.name === card.bank
+			(b) => b.name === cardData.bank
 		)!;
-		card.bank = bank.id;
-		return axiosInstance.post("/cards", card).then(async (res) => {
-			const card = await this.fetchCard(res.data.id);
-			runInAction(() => {
-				if (!this._cards[card.bank.id]) {
-					this._cards[card.bank.id] = [];
-				}
-				this._cards[card.bank.id].push(card);
-			});
-		});
-	};
+		cardData.bank = bank.id;
 
-	updateCard = async (id: string, card: Partial<CardFormValues>) => {
-		if (!card.logo) {
-			delete card.logo;
-		}
-		const bank = this.rootStore.banksStore.banks.find(
-			(bank) => bank.name === card.bank
-		)!;
-		card.bank = bank.id;
-		return axiosInstance.patch(`/cards/${id}`, card).then(async () => {
-			const card = await this.fetchCard(id);
-			const bankIndex = this._cards[card.bank.id].findIndex((b) => b.id === id);
-
-			if (isNumber(bankIndex) && bankIndex >= 0 && this._cards[card.bank.id]) {
-				this._cards[card.bank.id][bankIndex].updateCard(card);
-			}
+		await axiosInstance.patch(`/cards/${id}`, cardData);
+		const updatedCard = await this.fetchCard(id);
+		runInAction(() => {
+			this._cards[id] = updatedCard;
 		});
 	};
 }

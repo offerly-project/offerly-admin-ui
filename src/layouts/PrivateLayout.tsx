@@ -11,12 +11,11 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
-import { banksStore, cardsStore, userStore } from "@/stores";
+import { banksStore, cardsStore, offersStore, userStore } from "@/stores";
 import {
 	faBank,
 	faCreditCard,
 	faGift,
-	faShop,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
@@ -34,11 +33,13 @@ const PrivateLayout = observer((props: Props) => {
 	const [loading, setLoading] = useState(true);
 
 	useEffect(() => {
-		Promise.all([banksStore().fetchBanks(), cardsStore().fetchCards()]).finally(
-			() => {
-				setLoading(false);
-			}
-		);
+		Promise.all([
+			banksStore().fetchBanks(),
+			cardsStore().fetchCards(),
+			offersStore().fetchOffers(),
+		]).finally(() => {
+			setLoading(false);
+		});
 	}, []);
 
 	if (loading) {
@@ -88,15 +89,6 @@ const PrivateLayout = observer((props: Props) => {
 										>
 											<FontAwesomeIcon icon={faGift} />
 											<span>Offers</span>
-										</SidebarMenuButton>
-									</SidebarMenuItem>
-									<SidebarMenuItem>
-										<SidebarMenuButton
-											style={{ height: 50 }}
-											onClick={routeHandler("/stores")}
-										>
-											<FontAwesomeIcon icon={faShop} />
-											<span>Stores</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								</SidebarMenu>

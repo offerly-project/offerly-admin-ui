@@ -1,23 +1,25 @@
 import { axiosInstance } from "@/configs/configs";
 import { Bank, IBank } from "@/entities/bank.entity";
 import { AxiosResponse } from "axios";
-import { isNumber } from "lodash";
 import { makeAutoObservable } from "mobx";
 import { RootStore } from ".";
 
 export class BanksStore {
 	private rootStore: RootStore;
-	private _banks: Bank[] | null = null;
+	private _banks: Record<string, Bank> = {};
 	private _query: string = "";
+
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);
 	}
 
 	fetchBanks = async () => {
-		return axiosInstance.get("/banks").then((res: AxiosResponse<IBank[]>) => {
-			this._banks = res.data.map((bank) => new Bank(bank));
-		});
+		const res: AxiosResponse<IBank[]> = await axiosInstance.get("/banks");
+		this._banks = res.data.reduce((acc, bank) => {
+			acc[bank.id] = new Bank(bank);
+			return acc;
+		}, {} as { [id: string]: Bank });
 	};
 
 	updateFilter = (query: string) => {
@@ -25,48 +27,42 @@ export class BanksStore {
 	};
 
 	get banks() {
-		if (!this._banks) return [];
-		const banks = this._banks;
-
+		const banksArray = Object.values(this._banks);
 		if (this._query) {
-			return banks.filter((bank) =>
+			return banksArray.filter((bank) =>
 				bank.name.toLowerCase().includes(this._query.toLowerCase())
 			);
 		}
-		return banks;
+		return banksArray;
 	}
 
 	get banksList() {
-		return this._banks?.map((bank) => bank.name) || [];
+		return Object.values(this._banks).map((bank) => bank.name);
 	}
 
 	fetchBank = async (id: string) => {
-		return axiosInstance.get(`/banks/${id}`).then((res) => {
-			return new Bank(res.data);
-		});
+		const res = await axiosInstance.get(`/banks/${id}`);
+		const bank = new Bank(res.data);
+		this._banks[id] = bank;
+		return bank;
 	};
 
 	createBank = async (bank: Partial<IBank>) => {
 		if (!bank.logo) {
 			delete bank.logo;
 		}
-		return axiosInstance.post("/banks", bank).then(async (res) => {
-			const bank = await this.fetchBank(res.data.id);
-			this._banks?.push(bank);
-		});
+		const res = await axiosInstance.post("/banks", bank);
+		const newBank = await this.fetchBank(res.data.id);
+		this._banks[newBank.id] = newBank;
 	};
 
 	updateBank = async (id: string, bank: Partial<IBank>) => {
 		if (!bank.logo) {
 			delete bank.logo;
 		}
-		return axiosInstance.patch(`/banks/${id}`, bank).then(async () => {
-			const bank = await this.fetchBank(id);
-			const bankIndex = this._banks?.findIndex((b) => b.id === id);
+		await axiosInstance.patch(`/banks/${id}`, bank);
 
-			if (isNumber(bankIndex) && bankIndex >= 0 && this._banks) {
-				this._banks[bankIndex].updateBank(bank);
-			}
-		});
+		const updatedBank = await this.fetchBank(id);
+		this._banks[id] = updatedBank;
 	};
 }

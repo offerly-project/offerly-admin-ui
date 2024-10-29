@@ -8,11 +8,11 @@ import {
 import Banks from "./features/Banks/Banks";
 import Cards from "./features/Cards/Cards";
 import Offers from "./features/Offers/Offers";
-import Stores from "./features/Stores/Stores";
 import RootLayout from "./layouts/RootLayout";
 import LoginPage from "./pages/Login/LoginPage";
 import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
+import { CategoriesService } from "./services/categories.service";
 import { CountriesService } from "./services/countries.service";
 
 const router = createBrowserRouter(
@@ -22,7 +22,6 @@ const router = createBrowserRouter(
 				<Route path="/banks" element={<Banks />}></Route>
 				<Route path="/cards" element={<Cards />}></Route>
 				<Route path="/offers" element={<Offers />}></Route>
-				<Route path="/stores" element={<Stores />}></Route>
 			</Route>
 			<Route path="/" element={<PublicRoute />}>
 				<Route path="/login" element={<LoginPage />}></Route>
@@ -34,6 +33,7 @@ const router = createBrowserRouter(
 function App() {
 	useEffect(() => {
 		CountriesService.populate();
+		CategoriesService.populate();
 	}, []);
 	return <RouterProvider router={router} />;
 }
