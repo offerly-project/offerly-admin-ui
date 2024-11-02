@@ -55,7 +55,7 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 						pathPrefix={"/banks"}
 						path={getValues().logo}
 						onChange={(path) => {
-							setValue("logo", path);
+							setValue("logo", path, { shouldValidate: true });
 						}}
 						dims={{ height: 400, width: 400 }}
 						onUploadStateChange={(uploading) => {

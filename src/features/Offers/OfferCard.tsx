@@ -1,10 +1,16 @@
 import CardImage from "@/components/Image/CardImage";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Dialog, DialogTrigger } from "@/components/ui/dialog";
 import { Offer } from "@/entities/offer.entity";
 import { useToast } from "@/hooks/use-toast";
+import { offersStore } from "@/stores";
 import { formatAssetPath } from "@/utils/utils";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import moment from "moment";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
+import OfferForm, { OfferFormValues } from "./OfferForm";
 
 type Props = {
 	offer: Offer;
@@ -21,6 +27,7 @@ const OfferCard = ({ offer }: Props) => {
 	}, [offer.starting_date, offer.expiry_date]);
 
 	const constraintsFmt = useMemo(() => {
+		if (!offer.minimum_amount && !offer.cap) return "None";
 		const constraints: string[] = [];
 		if (offer.minimum_amount) constraints.push(`Min: ${offer.minimum_amount}`);
 		if (offer.cap) constraints.push(`Max: ${offer.cap}`);
@@ -36,6 +43,18 @@ const OfferCard = ({ offer }: Props) => {
 	}, [offer.categories]);
 
 	const { toast } = useToast();
+
+	const [open, setOpen] = useState(false);
+
+	const onUpdateOfferSubmit = async (values: OfferFormValues) => {
+		try {
+			await offersStore().updateOffer(offer.id, values);
+			toast({ description: "Offer updated" });
+			setOpen(false);
+		} catch (e: any) {
+			toast({ description: e.message });
+		}
+	};
 
 	return (
 		<Card>
@@ -77,6 +96,32 @@ const OfferCard = ({ offer }: Props) => {
 				<p className="text-gray-500">Constraints: {constraintsFmt}</p>
 				<p className="text-gray-500">Channel: {channelFmt}</p>
 				<p className="text-gray-500">Categories: {categoriesFmt}</p>
+				<div className="justify-center flex">
+					<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+						<DialogTrigger>
+							<Button variant={"ghost"} className="m-auto">
+								<FontAwesomeIcon icon={faEdit} />
+							</Button>
+						</DialogTrigger>
+						<OfferForm
+							initialValues={{
+								description: offer.description,
+								terms_and_conditions: offer.terms_and_conditions,
+								offer_source_link: offer.offer_source_link,
+								discount_code: offer.discount_code,
+								starting_date: offer.starting_date,
+								expiry_date: offer.expiry_date,
+								minimum_amount: offer.minimum_amount?.toString(),
+								cap: offer.cap?.toString(),
+								channel: offer.channel,
+								categories: offer.categories,
+								logo: offer.logo,
+								applicable_cards: offer.applicable_cards,
+							}}
+							onSubmit={onUpdateOfferSubmit}
+						/>
+					</Dialog>
+				</div>
 			</CardContent>
 		</Card>
 	);

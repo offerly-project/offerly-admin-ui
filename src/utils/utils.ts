@@ -1,6 +1,7 @@
 import { BankType } from "@/entities/bank.entity";
 import { Toast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
+import { isNumber } from "lodash";
 import { v4 } from "uuid";
 
 export const createErrorToastObject = (err: Error): Toast => {
@@ -40,3 +41,8 @@ export const formatBankType = (type: BankType) => {
 };
 
 export const randomId = () => v4();
+
+export const numberValidator = (value: string | undefined) => {
+	if (value === "" || value === undefined) return true;
+	return isNumber(+value);
+};

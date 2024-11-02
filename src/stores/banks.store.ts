@@ -42,8 +42,7 @@ export class BanksStore {
 
 	fetchBank = async (id: string) => {
 		const res = await axiosInstance.get(`/banks/${id}`);
-		const bank = new Bank(res.data);
-		this._banks[id] = bank;
+		const bank = res.data;
 		return bank;
 	};
 
@@ -53,7 +52,7 @@ export class BanksStore {
 		}
 		const res = await axiosInstance.post("/banks", bank);
 		const newBank = await this.fetchBank(res.data.id);
-		this._banks[newBank.id] = newBank;
+		this._banks[newBank.id] = new Bank(newBank);
 	};
 
 	updateBank = async (id: string, bank: Partial<IBank>) => {
@@ -63,6 +62,6 @@ export class BanksStore {
 		await axiosInstance.patch(`/banks/${id}`, bank);
 
 		const updatedBank = await this.fetchBank(id);
-		this._banks[id] = updatedBank;
+		this._banks[id].updateBank(updatedBank);
 	};
 }

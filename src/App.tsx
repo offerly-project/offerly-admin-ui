@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
 	createBrowserRouter,
 	createRoutesFromElements,
@@ -31,11 +31,14 @@ const router = createBrowserRouter(
 );
 
 function App() {
+	const [loading, setLoading] = useState(true);
 	useEffect(() => {
-		CountriesService.populate();
-		CategoriesService.populate();
+		Promise.all([
+			CountriesService.populate(),
+			CategoriesService.populate(),
+		]).then(() => setLoading(false));
 	}, []);
-	return <RouterProvider router={router} />;
+	return !loading && <RouterProvider router={router} />;
 }
 
 export default App;

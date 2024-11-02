@@ -1,3 +1,4 @@
+import Form from "@/components/Form/Form";
 import ImageUpload from "@/components/ImageUpload/ImageUpload";
 import { Button } from "@/components/ui/button";
 import { DialogContent } from "@/components/ui/dialog";
@@ -47,52 +48,56 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 				reset();
 			}}
 		>
-			<ImageUpload
-				pathPrefix={"/cards"}
-				path={getValues().logo}
-				onChange={function (path: string): void {
-					setValue("logo", path);
-				}}
-				onUploadStateChange={(uploading) => {
-					setUploading(uploading);
-				}}
-				dims={{ width: 450, height: 275 }}
-			/>
-			<Input
-				placeholder="Name"
-				{...register("name")}
-				error={formState.errors.name?.message}
-			/>
-			<Select
-				value={getValues().bank}
-				onValueChange={(value) => setValue("bank", value)}
-			>
-				<SelectTrigger error={formState.errors.bank?.message}>
-					<SelectValue placeholder="Bank" />
-				</SelectTrigger>
-				<SelectContent>
-					{banksStore().banksList.map((bank) => (
-						<SelectItem value={bank}>{bank}</SelectItem>
-					))}
-				</SelectContent>
-			</Select>
-			<Input
-				placeholder="Grade"
-				{...register("grade")}
-				error={formState.errors.grade?.message}
-			/>
-			<Input
-				placeholder="Scheme"
-				{...register("scheme")}
-				error={formState.errors.scheme?.message}
-			/>
-			<Button
-				disabled={!submittable}
-				variant={"outline"}
-				onClick={handleSubmit((data) => onSubmit(data))}
-			>
-				{initialValues ? "Update" : "Create"}
-			</Button>
+			<Form>
+				<ImageUpload
+					pathPrefix={"/cards"}
+					path={getValues().logo}
+					onChange={function (path: string): void {
+						setValue("logo", path, { shouldValidate: true });
+					}}
+					onUploadStateChange={(uploading) => {
+						setUploading(uploading);
+					}}
+					dims={{ width: 450, height: 275 }}
+				/>
+				<Input
+					placeholder="Name"
+					{...register("name")}
+					error={formState.errors.name?.message}
+				/>
+				<Select
+					value={getValues().bank}
+					onValueChange={(value) =>
+						setValue("bank", value, { shouldValidate: true })
+					}
+				>
+					<SelectTrigger error={formState.errors.bank?.message}>
+						<SelectValue placeholder="Bank" />
+					</SelectTrigger>
+					<SelectContent>
+						{banksStore().banksList.map((bank) => (
+							<SelectItem value={bank}>{bank}</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
+				<Input
+					placeholder="Grade"
+					{...register("grade")}
+					error={formState.errors.grade?.message}
+				/>
+				<Input
+					placeholder="Scheme"
+					{...register("scheme")}
+					error={formState.errors.scheme?.message}
+				/>
+				<Button
+					disabled={!submittable}
+					variant={"outline"}
+					onClick={handleSubmit((data) => onSubmit(data))}
+				>
+					{initialValues ? "Update" : "Create"}
+				</Button>
+			</Form>
 		</DialogContent>
 	);
 };

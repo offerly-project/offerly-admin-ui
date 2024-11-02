@@ -9,12 +9,6 @@ export class CountriesService {
 			const response = await axiosInstance.get("/static/countries.json");
 
 			CountriesService.countries = response.data;
-			console.log(
-				response.data.map((country: string) => ({
-					value: country,
-					label: country,
-				}))
-			);
 
 			CountriesService.list = response.data.map((country: string) => ({
 				value: country,

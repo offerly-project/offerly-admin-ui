@@ -1,7 +1,9 @@
 import { axiosInstance } from "@/configs/configs";
 import { IOffer, Offer } from "@/entities/offer.entity";
+import { OfferFormValues } from "@/features/Offers/OfferForm";
 import { AxiosResponse } from "axios";
-import { makeAutoObservable } from "mobx";
+import { isNumber } from "lodash";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
 type Query = {
@@ -29,6 +31,40 @@ export class OffersStore {
 		}, {} as { [id: string]: Offer });
 	};
 
+	fetchOfferById = async (id: string) => {
+		const res: AxiosResponse<IOffer> = await axiosInstance.get(`/offers/${id}`);
+		const offer = res.data;
+		return offer;
+	};
+
+	createOffer = async (data: OfferFormValues) => {
+		const id = await axiosInstance
+			.post("/offers", data, {
+				headers: {
+					"Content-Type": "application/json",
+				},
+				transformRequest: (data: OfferFormValues) => {
+					const { cap, minimum_amount, ...rest } = data;
+
+					const transformedData = {
+						...rest,
+						...(isNumber(cap) ? { cap: +cap } : {}),
+						...(isNumber(minimum_amount)
+							? { minimum_amount: +minimum_amount }
+							: {}),
+					};
+
+					return JSON.stringify(transformedData);
+				},
+			})
+			.then((res: AxiosResponse<{ id: string }>) => res.data.id);
+
+		const offer = await this.fetchOfferById(id);
+		runInAction(() => {
+			this._offers[offer.id] = new Offer(offer);
+		});
+	};
+
 	get offers() {
 		let offers = Object.values(this._offers);
 		if (this.query.cards.length) {
@@ -52,5 +88,13 @@ export class OffersStore {
 
 	setCategoriesQuery = (categories: string[]) => {
 		this.query.categories = categories;
+	};
+
+	updateOffer = async (id: string, data: OfferFormValues) => {
+		await axiosInstance.patch(`/offers/${id}`, data);
+		const offer = await this.fetchOfferById(id);
+		runInAction(() => {
+			this._offers[id].updateOffer(offer);
+		});
 	};
 }

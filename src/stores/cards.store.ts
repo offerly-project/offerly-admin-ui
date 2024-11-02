@@ -62,10 +62,7 @@ export class CardsStore {
 
 	fetchCard = async (id: string) => {
 		const res = await axiosInstance.get(`/cards/${id}`);
-		const card = new Card(res.data);
-		runInAction(() => {
-			this._cards[id] = card;
-		});
+		const card = res.data;
 		return card;
 	};
 
@@ -78,7 +75,7 @@ export class CardsStore {
 		const res = await axiosInstance.post("/cards", cardFormData);
 		const newCard = await this.fetchCard(res.data.id);
 		runInAction(() => {
-			this._cards[newCard.id] = newCard;
+			this._cards[newCard.id] = new Card(newCard);
 		});
 	};
 
@@ -92,7 +89,7 @@ export class CardsStore {
 		await axiosInstance.patch(`/cards/${id}`, cardData);
 		const updatedCard = await this.fetchCard(id);
 		runInAction(() => {
-			this._cards[id] = updatedCard;
+			this._cards[id].updateCard(updatedCard);
 		});
 	};
 }
