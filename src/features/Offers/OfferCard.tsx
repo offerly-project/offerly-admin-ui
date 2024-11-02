@@ -1,4 +1,16 @@
 import CardImage from "@/components/Image/CardImage";
+import StatusSwitch from "@/components/StatusSwitch/StatusSwitch";
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogDescription,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Dialog, DialogTrigger } from "@/components/ui/dialog";
@@ -6,8 +18,9 @@ import { Offer } from "@/entities/offer.entity";
 import { useToast } from "@/hooks/use-toast";
 import { offersStore } from "@/stores";
 import { formatAssetPath } from "@/utils/utils";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { observer } from "mobx-react-lite";
 import moment from "moment";
 import { useMemo, useState } from "react";
 import OfferForm, { OfferFormValues } from "./OfferForm";
@@ -16,7 +29,7 @@ type Props = {
 	offer: Offer;
 };
 
-const OfferCard = ({ offer }: Props) => {
+const OfferCard = observer(({ offer }: Props) => {
 	const dateFmt = useMemo(() => {
 		const fmt: string[] = [];
 		if (offer.starting_date)
@@ -54,6 +67,18 @@ const OfferCard = ({ offer }: Props) => {
 		} catch (e: any) {
 			toast({ description: e.message });
 		}
+	};
+
+	const onEnable = async () => {
+		await offer.updateStatus("enabled");
+	};
+
+	const onDisable = async () => {
+		await offer.updateStatus("disabled");
+	};
+
+	const onDelete = async () => {
+		await offersStore().deleteOffer(offer.id);
 	};
 
 	return (
@@ -96,6 +121,11 @@ const OfferCard = ({ offer }: Props) => {
 				<p className="text-gray-500">Constraints: {constraintsFmt}</p>
 				<p className="text-gray-500">Channel: {channelFmt}</p>
 				<p className="text-gray-500">Categories: {categoriesFmt}</p>
+				<StatusSwitch
+					status={offer.status}
+					onEnable={onEnable}
+					onDisable={onDisable}
+				/>
 				<div className="justify-center flex">
 					<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
 						<DialogTrigger>
@@ -121,10 +151,29 @@ const OfferCard = ({ offer }: Props) => {
 							onSubmit={onUpdateOfferSubmit}
 						/>
 					</Dialog>
+					<AlertDialog>
+						<AlertDialogTrigger>
+							<Button variant={"ghost"}>
+								<FontAwesomeIcon icon={faTrash} />
+							</Button>
+						</AlertDialogTrigger>
+						<AlertDialogContent>
+							<AlertDialogHeader>
+								<AlertDialogTitle>Confirmation</AlertDialogTitle>
+								<AlertDialogDescription>
+									Are you sure you want to delete this offer?
+								</AlertDialogDescription>
+							</AlertDialogHeader>
+							<AlertDialogFooter>
+								<AlertDialogCancel>No</AlertDialogCancel>
+								<AlertDialogAction onClick={onDelete}>Yes</AlertDialogAction>
+							</AlertDialogFooter>
+						</AlertDialogContent>
+					</AlertDialog>
 				</div>
 			</CardContent>
 		</Card>
 	);
-};
+});
 
 export default OfferCard;

@@ -97,4 +97,11 @@ export class OffersStore {
 			this._offers[id].updateOffer(offer);
 		});
 	};
+
+	deleteOffer = async (id: string) => {
+		await axiosInstance.delete(`/offers/${id}`);
+		runInAction(() => {
+			delete this._offers[id];
+		});
+	};
 }

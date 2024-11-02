@@ -1,3 +1,7 @@
+import { axiosInstance } from "@/configs/configs";
+import { ActiveStatusType } from "@/ts/api.types";
+import { makeAutoObservable, runInAction } from "mobx";
+
 export interface IOffer {
 	id: string;
 	terms_and_conditions: string;
@@ -12,6 +16,7 @@ export interface IOffer {
 	categories: string[];
 	applicable_cards: string[];
 	offer_source_link: string;
+	status: ActiveStatusType;
 }
 
 export class Offer {
@@ -28,6 +33,7 @@ export class Offer {
 	categories: string[];
 	applicable_cards: string[];
 	offer_source_link: string;
+	status: ActiveStatusType;
 
 	constructor(offer: IOffer) {
 		this.id = offer.id;
@@ -43,6 +49,8 @@ export class Offer {
 		this.categories = offer.categories;
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;
+		this.status = offer.status;
+		makeAutoObservable(this);
 	}
 	updateOffer(offer: IOffer) {
 		this.terms_and_conditions = offer.terms_and_conditions;
@@ -57,5 +65,14 @@ export class Offer {
 		this.categories = offer.categories;
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;
+		this.status = offer.status;
 	}
+
+	updateStatus = async (status: ActiveStatusType) => {
+		return axiosInstance.patch(`/offers/${this.id}`, { status }).then(() => {
+			runInAction(() => {
+				this.status = status;
+			});
+		});
+	};
 }
