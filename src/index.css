@@ -91,3 +91,38 @@
 		@apply bg-background text-foreground;
 	}
 }
+
+.mdxeditor * {
+	z-index: 1000 !important;
+}
+
+.mdxeditor * {
+	list-style: revert !important;
+}
+
+.mdxeditor-contenteditable {
+	padding-bottom: 120px;
+}
+
+.md-preview * {
+	list-style: revert !important;
+}
+
+.mdxeditor-select-content * {
+	z-index: 2000 !important;
+	color: black !important;
+	background-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.mdxeditor-popup-container {
+	z-index: 2000 !important;
+}
+
+.mdxeditor h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: rgba(255, 255, 255, 0.4) !important;
+}

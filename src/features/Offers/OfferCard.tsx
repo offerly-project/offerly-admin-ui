@@ -1,4 +1,5 @@
 import CardImage from "@/components/Image/CardImage";
+import MarkdownPreview from "@/components/Markdown/MarkdownPreview";
 import StatusSwitch from "@/components/StatusSwitch/StatusSwitch";
 import {
 	AlertDialog,
@@ -95,8 +96,12 @@ const OfferCard = observer(({ offer }: Props) => {
 				/>
 			</CardHeader>
 			<CardContent className="flex flex-col space-y-4">
-				<p className="font-bold text-lg">{offer.description}</p>
-				<p className="text-gray-500">{offer.terms_and_conditions}</p>
+				<MarkdownPreview className="font-bold text-lg">
+					{offer.description}
+				</MarkdownPreview>
+				<MarkdownPreview className="text-gray-500">
+					{offer.terms_and_conditions}
+				</MarkdownPreview>
 				<a
 					href={offer.offer_source_link}
 					className="text-blue-400 border-b w-fit pb-1 border-blue-400 cursor-pointer"

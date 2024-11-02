@@ -1,4 +1,5 @@
 import ImageUpload from "@/components/ImageUpload/ImageUpload";
+import MarkdownEditor from "@/components/Markdown/MarkdownEditor";
 import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { DialogContent } from "@/components/ui/dialog";
@@ -11,7 +12,6 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { CategoriesService } from "@/services/categories.service";
 import { cardsStore } from "@/stores";
 import { numberValidator } from "@/utils/utils";
@@ -22,10 +22,10 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-	terms_and_conditions: z
-		.string()
-		.min(1, { message: "Terms and conditions are required" }),
-	description: z.string().min(1, { message: "Description is required" }),
+	terms_and_conditions: z.string({
+		message: "Terms and conditions are required",
+	}),
+	description: z.string({ message: "Description is required" }),
 	starting_date: z.coerce.date().optional(),
 	expiry_date: z.coerce.date(),
 	minimum_amount: z.string().optional().refine(numberValidator),
@@ -37,9 +37,7 @@ const schema = z.object({
 	applicable_cards: z.array(z.string(), {
 		message: "Applicable cards are required",
 	}),
-	offer_source_link: z
-		.string()
-		.min(1, { message: "Offer source link is required" }),
+	offer_source_link: z.string({ message: "Offer source link is required" }),
 });
 
 export type OfferFormValues = z.infer<typeof schema>;
@@ -62,8 +60,6 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 	const categories = CategoriesService.categories;
 	const cards = cardsStore().cards;
 
-	console.log(categories, cards);
-
 	return (
 		<DialogContent
 			style={{ width: "95vw", maxWidth: "100vw" }}
@@ -76,18 +72,22 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 				onChange={(value) => setValue("logo", value, { shouldValidate: true })}
 				dims={{ width: 200, height: 200 }}
 			/>
-			<div className="grid grid-cols-4 grid-rows-2 gap-4 items-center">
-				<Textarea
-					placeholder="Terms & Conditions"
-					className="resize-none"
-					{...register("terms_and_conditions")}
-					error={formState.errors.terms_and_conditions?.message}
-				/>
-				<Textarea
+			<div className="grid grid-cols-4 grid-rows-2 gap-4">
+				<MarkdownEditor
 					placeholder="Description"
-					className="resize-none"
-					{...register("description")}
+					value={getValues().description}
+					onChange={(value) =>
+						setValue("description", value, { shouldValidate: true })
+					}
 					error={formState.errors.description?.message}
+				/>
+				<MarkdownEditor
+					placeholder="Terms & Conditions"
+					value={getValues().terms_and_conditions}
+					onChange={(value) =>
+						setValue("terms_and_conditions", value, { shouldValidate: true })
+					}
+					error={formState.errors.terms_and_conditions?.message}
 				/>
 				<Select
 					value={getValues().channel}
