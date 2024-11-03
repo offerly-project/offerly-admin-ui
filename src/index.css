@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+	overflow-y: scroll !important;
+}
+
 @layer base {
 	.light {
 		--background: 0 0% 100%;
@@ -108,21 +112,22 @@
 	list-style: revert !important;
 }
 
-.mdxeditor-select-content * {
-	z-index: 2000 !important;
-	color: black !important;
-	background-color: rgba(255, 255, 255, 0.2) !important;
+.w-md-editor-toolbar {
+	background-color: transparent;
 }
 
-.mdxeditor-popup-container {
-	z-index: 2000 !important;
+.w-md-editor-toolbar ul:last-child {
+	display: none;
 }
 
-.mdxeditor h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-	color: rgba(255, 255, 255, 0.4) !important;
+.w-md-editor-content * {
+	--color-canvas-default: transparent !important;
+}
+
+.sketch-picker * {
+	color: white !important;
+}
+
+.sketch-picker {
+	background-color: transparent !important;
 }

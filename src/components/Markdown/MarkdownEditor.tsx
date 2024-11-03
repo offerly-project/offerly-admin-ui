@@ -1,21 +1,9 @@
-import {
-	BlockTypeSelect,
-	BoldItalicUnderlineToggles,
-	headingsPlugin,
-	InsertThematicBreak,
-	linkDialogPlugin,
-	listsPlugin,
-	ListsToggle,
-	MDXEditor,
-	thematicBreakPlugin,
-	toolbarPlugin,
-	UndoRedo,
-} from "@mdxeditor/editor";
 import "@mdxeditor/editor/style.css";
+import MDEditor, { commands } from "@uiw/react-md-editor";
 import { useMemo, useState } from "react";
 import { Button } from "../ui/button";
-import { Card } from "../ui/card";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
+import { MDColorCommand } from "./MDColorCommand";
 type Props = {
 	placeholder?: string;
 	value?: string;
@@ -65,34 +53,27 @@ const MarkdownEditor = ({
 				</div>
 			</DialogTrigger>
 			<DialogContent className="pt-16">
-				<Card className="pb-8">
-					<MDXEditor
-						autoFocus
-						trim
-						placeholder={placeholder}
-						plugins={[
-							headingsPlugin(),
-							linkDialogPlugin(),
-							listsPlugin({}),
-							thematicBreakPlugin(),
-							toolbarPlugin({
-								toolbarClassName: "bg-zinc-900",
-								toolbarContents: () => (
-									<>
-										<BlockTypeSelect />
-										<UndoRedo />
-										<BoldItalicUnderlineToggles />
-										<ListsToggle options={["bullet", "number"]} />
-										<InsertThematicBreak />
-									</>
-								),
-							}),
-						]}
-						className="dark-theme h-[300px] w-full overflow-scroll prose"
-						markdown={state}
-						onChange={setState}
-					/>
-				</Card>
+				<MDEditor
+					value={state}
+					onChange={(val) => {
+						setState(val || "");
+					}}
+					className="w-full h-[300px] bg-transparent"
+					commands={[
+						commands.bold,
+						commands.italic,
+						commands.hr,
+						commands.title,
+						commands.code,
+						commands.link,
+						commands.quote,
+						commands.checkedListCommand,
+						commands.orderedListCommand,
+						commands.unorderedListCommand,
+						MDColorCommand,
+					]}
+					visibleDragbar={false}
+				/>
 
 				<Button
 					variant={"ghost"}

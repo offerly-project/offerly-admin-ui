@@ -1,4 +1,5 @@
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 
 type Props = {
 	children: string;
@@ -8,7 +9,9 @@ type Props = {
 const MarkdownPreview = ({ children, className }: Props) => {
 	return (
 		<div className={"md-preview"}>
-			<Markdown className={className}>{children}</Markdown>
+			<Markdown className={className} rehypePlugins={[rehypeRaw]}>
+				{children}
+			</Markdown>
 		</div>
 	);
 };
