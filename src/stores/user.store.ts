@@ -10,7 +10,7 @@ interface IUser {
 export class UserStore {
 	rootStore: RootStore;
 	authenticated: boolean = true;
-	user!: IUser = {
+	user: IUser = {
 		username: "jad",
 	};
 	constructor(rootStore: RootStore) {
@@ -21,7 +21,7 @@ export class UserStore {
 	login(username: string, password: string) {
 		return axiosInstance
 			.post(
-				"/auth/login/admin",
+				"/auth/admin/login",
 				{
 					username,
 					password,
