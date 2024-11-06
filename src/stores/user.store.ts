@@ -13,15 +13,16 @@ export class UserStore {
 	user: IUser = {
 		username: "jad",
 	};
+
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);
 	}
 
-	login(username: string, password: string) {
+	async login(username: string, password: string) {
 		return axiosInstance
 			.post(
-				"/auth/admin/login",
+				"/admin/auth/login",
 				{
 					username,
 					password,

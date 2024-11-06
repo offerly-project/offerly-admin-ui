@@ -36,11 +36,13 @@ export class Card {
 		makeAutoObservable(this);
 	}
 	updateStatus = async (status: ActiveStatusType) => {
-		return axiosInstance.patch(`/cards/${this.id}`, { status }).then(() => {
-			runInAction(() => {
-				this.status = status;
+		return axiosInstance
+			.patch(`/admin/cards/${this.id}`, { status })
+			.then(() => {
+				runInAction(() => {
+					this.status = status;
+				});
 			});
-		});
 	};
 
 	updateCard = async (card: Partial<ICard>) => {

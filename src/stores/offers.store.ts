@@ -24,7 +24,9 @@ export class OffersStore {
 	}
 
 	fetchOffers = async () => {
-		const res: AxiosResponse<IOffer[]> = await axiosInstance.get("/offers");
+		const res: AxiosResponse<IOffer[]> = await axiosInstance.get(
+			"/admin/offers"
+		);
 		this._offers = res.data.reduce((acc, offer) => {
 			acc[offer.id] = new Offer(offer);
 			return acc;
@@ -32,14 +34,16 @@ export class OffersStore {
 	};
 
 	fetchOfferById = async (id: string) => {
-		const res: AxiosResponse<IOffer> = await axiosInstance.get(`/offers/${id}`);
+		const res: AxiosResponse<IOffer> = await axiosInstance.get(
+			`/admin/offers/${id}`
+		);
 		const offer = res.data;
 		return offer;
 	};
 
 	createOffer = async (data: OfferFormValues) => {
 		const id = await axiosInstance
-			.post("/offers", data, {
+			.post("/admin/offers", data, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -91,7 +95,7 @@ export class OffersStore {
 	};
 
 	updateOffer = async (id: string, data: OfferFormValues) => {
-		await axiosInstance.patch(`/offers/${id}`, data);
+		await axiosInstance.patch(`/admin/offers/${id}`, data);
 		const offer = await this.fetchOfferById(id);
 		runInAction(() => {
 			this._offers[id].updateOffer(offer);
@@ -99,7 +103,7 @@ export class OffersStore {
 	};
 
 	deleteOffer = async (id: string) => {
-		await axiosInstance.delete(`/offers/${id}`);
+		await axiosInstance.delete(`/admin/offers/${id}`);
 		runInAction(() => {
 			delete this._offers[id];
 		});

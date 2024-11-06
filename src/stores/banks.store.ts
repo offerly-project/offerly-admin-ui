@@ -15,7 +15,7 @@ export class BanksStore {
 	}
 
 	fetchBanks = async () => {
-		const res: AxiosResponse<IBank[]> = await axiosInstance.get("/banks");
+		const res: AxiosResponse<IBank[]> = await axiosInstance.get("/admin/banks");
 		this._banks = res.data.reduce((acc, bank) => {
 			acc[bank.id] = new Bank(bank);
 			return acc;
@@ -41,7 +41,7 @@ export class BanksStore {
 	}
 
 	fetchBank = async (id: string) => {
-		const res = await axiosInstance.get(`/banks/${id}`);
+		const res = await axiosInstance.get(`/admin/banks/${id}`);
 		const bank = res.data;
 		return bank;
 	};
@@ -50,7 +50,7 @@ export class BanksStore {
 		if (!bank.logo) {
 			delete bank.logo;
 		}
-		const res = await axiosInstance.post("/banks", bank);
+		const res = await axiosInstance.post("/admin/banks", bank);
 		const newBank = await this.fetchBank(res.data.id);
 		this._banks[newBank.id] = new Bank(newBank);
 	};
@@ -59,7 +59,7 @@ export class BanksStore {
 		if (!bank.logo) {
 			delete bank.logo;
 		}
-		await axiosInstance.patch(`/banks/${id}`, bank);
+		await axiosInstance.patch(`/admin/banks/${id}`, bank);
 
 		const updatedBank = await this.fetchBank(id);
 		this._banks[id].updateBank(updatedBank);

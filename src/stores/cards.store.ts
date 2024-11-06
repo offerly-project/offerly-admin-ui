@@ -33,7 +33,7 @@ export class CardsStore {
 
 	fetchCards = async () => {
 		const cards = await axiosInstance
-			.get("/cards")
+			.get("/admin/cards")
 			.then((res: AxiosResponse<ICard[]>) => res.data);
 		runInAction(() => {
 			this._cards = cards.reduce((acc, cardData) => {
@@ -61,7 +61,7 @@ export class CardsStore {
 	}
 
 	fetchCard = async (id: string) => {
-		const res = await axiosInstance.get(`/cards/${id}`);
+		const res = await axiosInstance.get(`/admin/cards/${id}`);
 		const card = res.data;
 		return card;
 	};
@@ -72,7 +72,7 @@ export class CardsStore {
 		)!;
 		cardFormData.bank = bank.id;
 
-		const res = await axiosInstance.post("/cards", cardFormData);
+		const res = await axiosInstance.post("/admin/cards", cardFormData);
 		const newCard = await this.fetchCard(res.data.id);
 		runInAction(() => {
 			this._cards[newCard.id] = new Card(newCard);
@@ -86,7 +86,7 @@ export class CardsStore {
 		)!;
 		cardData.bank = bank.id;
 
-		await axiosInstance.patch(`/cards/${id}`, cardData);
+		await axiosInstance.patch(`/admin/cards/${id}`, cardData);
 		const updatedCard = await this.fetchCard(id);
 		runInAction(() => {
 			this._cards[id].updateCard(updatedCard);

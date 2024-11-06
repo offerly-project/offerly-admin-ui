@@ -46,10 +46,12 @@ export class Bank {
 	};
 
 	updateStatus = (status: ActiveStatusType) => {
-		return axiosInstance.patch(`/banks/${this.id}`, { status }).then(() => {
-			runInAction(() => {
-				this.status = status;
+		return axiosInstance
+			.patch(`/admin/banks/${this.id}`, { status })
+			.then(() => {
+				runInAction(() => {
+					this.status = status;
+				});
 			});
-		});
 	};
 }

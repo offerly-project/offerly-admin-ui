@@ -69,10 +69,12 @@ export class Offer {
 	}
 
 	updateStatus = async (status: ActiveStatusType) => {
-		return axiosInstance.patch(`/offers/${this.id}`, { status }).then(() => {
-			runInAction(() => {
-				this.status = status;
+		return axiosInstance
+			.patch(`/admin/offers/${this.id}`, { status })
+			.then(() => {
+				runInAction(() => {
+					this.status = status;
+				});
 			});
-		});
 	};
 }
