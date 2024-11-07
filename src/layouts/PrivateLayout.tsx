@@ -16,6 +16,7 @@ import {
 	faBank,
 	faCreditCard,
 	faGift,
+	faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
@@ -89,6 +90,17 @@ const PrivateLayout = observer((props: Props) => {
 										>
 											<FontAwesomeIcon icon={faGift} />
 											<span>Offers</span>
+										</SidebarMenuButton>
+									</SidebarMenuItem>
+									<SidebarMenuItem>
+										<SidebarMenuButton
+											style={{ height: 50 }}
+											onClick={() => {
+												userStore().logout();
+											}}
+										>
+											<FontAwesomeIcon icon={faSignOut} />
+											<span>Logout</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
 								</SidebarMenu>

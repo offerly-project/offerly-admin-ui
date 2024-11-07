@@ -1,6 +1,6 @@
-import { axiosInstance } from "@/configs/configs";
+import { AxiosAuthInterceptor, axiosInstance } from "@/configs/configs";
 import { AxiosResponse } from "axios";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
 interface IUser {
@@ -9,10 +9,8 @@ interface IUser {
 
 export class UserStore {
 	rootStore: RootStore;
-	authenticated: boolean = true;
-	user: IUser = {
-		username: "jad",
-	};
+	authenticated: boolean = false;
+	user: IUser = {} as IUser;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -29,13 +27,23 @@ export class UserStore {
 				},
 				{ withCredentials: true }
 			)
-			.then((res: AxiosResponse<{ user: string }>) => {
-				const { user } = res.data;
-				this.user = {
-					username: user,
-				};
+			.then((res: AxiosResponse<{ user: string; token: string }>) => {
+				runInAction(() => {
+					const { user, token } = res.data;
+					this.user = {
+						username: user,
+					};
 
-				this.authenticated = true;
+					AxiosAuthInterceptor.addBearerTokenInterceptor(token);
+
+					this.authenticated = true;
+				});
 			});
+	}
+
+	logout() {
+		this.authenticated = false;
+		AxiosAuthInterceptor.removeBearerTokenInterceptor();
+		this.user = {} as IUser;
 	}
 }
