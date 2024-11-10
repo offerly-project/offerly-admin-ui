@@ -38,6 +38,7 @@ const schema = z.object({
 		message: "Applicable cards are required",
 	}),
 	offer_source_link: z.string({ message: "Offer source link is required" }),
+	title: z.string({ message: "Title is required" }),
 });
 
 export type OfferFormValues = z.infer<typeof schema>;
@@ -72,7 +73,13 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 				onChange={(value) => setValue("logo", value, { shouldValidate: true })}
 				dims={{ width: 200, height: 200 }}
 			/>
+
 			<div className="grid grid-cols-4 grid-rows-2 gap-4">
+				<Input
+					placeholder="Title"
+					{...register("title")}
+					error={formState.errors.title?.message}
+				/>
 				<MarkdownEditor
 					placeholder="Description"
 					value={getValues().description}

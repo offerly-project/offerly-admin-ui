@@ -97,10 +97,10 @@ const OfferCard = observer(({ offer }: Props) => {
 			</CardHeader>
 			<CardContent className="flex flex-col space-y-4">
 				<MarkdownPreview className="font-bold text-lg">
-					{offer.description}
+					{offer.title}
 				</MarkdownPreview>
 				<MarkdownPreview className="text-gray-500">
-					{offer.terms_and_conditions}
+					{offer.description}
 				</MarkdownPreview>
 				<a
 					href={offer.offer_source_link}
@@ -152,6 +152,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								categories: offer.categories,
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,
+								title: offer.title,
 							}}
 							onSubmit={onUpdateOfferSubmit}
 						/>

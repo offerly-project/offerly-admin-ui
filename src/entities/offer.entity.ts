@@ -17,10 +17,12 @@ export interface IOffer {
 	applicable_cards: string[];
 	offer_source_link: string;
 	status: ActiveStatusType;
+	title: string;
 }
 
 export class Offer {
 	id: string;
+	title: string;
 	terms_and_conditions: string;
 	starting_date?: Date;
 	expiry_date: Date;
@@ -50,6 +52,7 @@ export class Offer {
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;
 		this.status = offer.status;
+		this.title = offer.title;
 		makeAutoObservable(this);
 	}
 	updateOffer(offer: IOffer) {
@@ -66,6 +69,7 @@ export class Offer {
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;
 		this.status = offer.status;
+		this.title = offer.title;
 	}
 
 	updateStatus = async (status: ActiveStatusType) => {
