@@ -25,7 +25,10 @@ type Props = {
 };
 
 const schema = z.object({
-	name: z.string().min(1, { message: "Bank name is required" }),
+	name: z.object({
+		en: z.string({ message: "Name is required" }).min(1),
+		ar: z.string({ message: "Name is required" }).min(1),
+	}),
 	type: z.enum(["digital", "regular", "digital-wallet"]),
 	country: z.string({ message: "Country is required" }).min(1),
 	logo: z.string().optional(),
@@ -63,9 +66,14 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 						}}
 					/>
 					<Input
-						placeholder="Name"
-						{...register("name")}
-						error={formState.errors.name?.message}
+						placeholder="Name (English)"
+						{...register("name.en")}
+						error={formState.errors.name?.ar?.message}
+					/>
+					<Input
+						placeholder="Name (Arabic)"
+						{...register("name.ar")}
+						error={formState.errors.name?.en?.message}
 					/>
 
 					<Select

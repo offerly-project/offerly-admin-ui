@@ -30,7 +30,7 @@ export class BanksStore {
 		const banksArray = Object.values(this._banks);
 		if (this._query) {
 			return banksArray.filter((bank) =>
-				bank.name.toLowerCase().includes(this._query.toLowerCase())
+				bank.name.en.toLowerCase().includes(this._query.toLowerCase())
 			);
 		}
 		return banksArray;

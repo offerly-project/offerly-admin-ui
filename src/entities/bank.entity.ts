@@ -1,5 +1,6 @@
 import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
+import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export type BankType = "regular" | "digital" | "digital-wallet";
@@ -7,7 +8,7 @@ export type BankType = "regular" | "digital" | "digital-wallet";
 export interface IBank {
 	country: string;
 	type: BankType;
-	name: string;
+	name: Translation;
 	logo: string;
 	status: ActiveStatusType;
 	cards: string[];
@@ -17,7 +18,7 @@ export interface IBank {
 export class Bank {
 	country: string;
 	type: BankType;
-	name: string;
+	name: Translation;
 	logo: string;
 	status: ActiveStatusType;
 	cards: string[];

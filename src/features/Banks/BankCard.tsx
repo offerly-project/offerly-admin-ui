@@ -57,7 +57,7 @@ const BankCard = observer(({ bank }: Props) => {
 				/>
 			</CardHeader>
 			<CardContent className="space-y-4 ">
-				<p className=" font-bold text-xl">{bank.name}</p>
+				<p className=" font-bold text-xl">{bank.name.en}</p>
 				<p className=" text-gray-300">{bank.country}</p>
 				<p className=" text-gray-300">{formatBankType(bank.type)}</p>
 				<StatusSwitch
