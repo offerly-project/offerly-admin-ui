@@ -10,6 +10,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { languagesSchema } from "@/constants/constants";
 import { BankType } from "@/entities/bank.entity";
 import { CountriesService } from "@/services/countries.service";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -25,10 +26,7 @@ type Props = {
 };
 
 const schema = z.object({
-	name: z.object({
-		en: z.string({ message: "Name is required" }).min(1),
-		ar: z.string({ message: "Name is required" }).min(1),
-	}),
+	name: languagesSchema,
 	type: z.enum(["digital", "regular", "digital-wallet"]),
 	country: z.string({ message: "Country is required" }).min(1),
 	logo: z.string().optional(),

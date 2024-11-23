@@ -49,12 +49,12 @@ export class CardsStore {
 
 		if (this.query.bank && this.query.bank !== "All") {
 			filteredCards = filteredCards.filter(
-				(card) => card.bank.name === this.query.bank
+				(card) => card.bank.name.en === this.query.bank
 			);
 		}
 		if (this.query.search) {
 			filteredCards = filteredCards.filter((card) =>
-				card.name.toLowerCase().includes(this.query.search.toLowerCase())
+				card.name.en.toLowerCase().includes(this.query.search.toLowerCase())
 			);
 		}
 		return filteredCards;
@@ -68,7 +68,7 @@ export class CardsStore {
 
 	createCard = async (cardFormData: CardFormValues) => {
 		const bank = this.rootStore.banksStore.banks.find(
-			(b) => b.name === cardFormData.bank
+			(b) => b.name.en === cardFormData.bank
 		)!;
 		cardFormData.bank = bank.id;
 
@@ -82,7 +82,7 @@ export class CardsStore {
 	updateCard = async (id: string, cardData: Partial<CardFormValues>) => {
 		if (!cardData.logo) delete cardData.logo;
 		const bank = this.rootStore.banksStore.banks.find(
-			(b) => b.name === cardData.bank
+			(b) => b.name.en === cardData.bank
 		)!;
 		cardData.bank = bank.id;
 

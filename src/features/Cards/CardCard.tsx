@@ -53,10 +53,10 @@ const CardCard = observer(({ card }: Props) => {
 				/>
 			</CardHeader>
 			<CardContent className="space-y-4 ">
-				<p className=" font-bold text-lg">{card.name}</p>
-				<p className=" text-gray-300">{card.scheme}</p>
-				<p className=" text-gray-300">{card.bank.name}</p>
-				<p className=" text-gray-300">{card.grade}</p>
+				<p className=" font-bold text-lg">{card.name.en}</p>
+				<p className=" text-gray-300">{card.scheme.en}</p>
+				<p className=" text-gray-300">{card.bank.name.en}</p>
+				<p className=" text-gray-300">{card.grade.en}</p>
 				<StatusSwitch
 					status={card.status}
 					onEnable={onEnable}
@@ -74,7 +74,7 @@ const CardCard = observer(({ card }: Props) => {
 							initialValues={{
 								name: card.name,
 								scheme: card.scheme,
-								bank: card.bank.name,
+								bank: card.bank.name.en,
 								grade: card.grade,
 								logo: card.logo,
 							}}

@@ -37,7 +37,7 @@ export class BanksStore {
 	}
 
 	get banksList() {
-		return Object.values(this._banks).map((bank) => bank.name);
+		return Object.values(this._banks).map((bank) => bank.name.en);
 	}
 
 	fetchBank = async (id: string) => {

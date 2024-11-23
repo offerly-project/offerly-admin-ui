@@ -10,6 +10,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { languagesSchema } from "@/constants/constants";
 import { banksStore } from "@/stores";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
@@ -18,11 +19,11 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-	name: z.string().min(1, { message: "Card name is required" }),
+	name: languagesSchema,
 	bank: z.string().min(1, { message: "Bank is required" }),
 	logo: z.string().optional(),
-	grade: z.string(),
-	scheme: z.string(),
+	grade: languagesSchema,
+	scheme: languagesSchema,
 });
 
 export type CardFormValues = z.infer<typeof schema>;
@@ -47,6 +48,7 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 			onCloseAutoFocus={() => {
 				reset();
 			}}
+			className="h-[80%] overflow-auto"
 		>
 			<Form>
 				<ImageUpload
@@ -61,8 +63,13 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 					dims={{ width: 450, height: 275 }}
 				/>
 				<Input
-					placeholder="Name"
-					{...register("name")}
+					placeholder="Name (English)"
+					{...register("name.en")}
+					error={formState.errors.name?.message}
+				/>
+				<Input
+					placeholder="Name (Arabic)"
+					{...register("name.ar")}
 					error={formState.errors.name?.message}
 				/>
 				<Select
@@ -81,13 +88,23 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 					</SelectContent>
 				</Select>
 				<Input
-					placeholder="Grade"
-					{...register("grade")}
+					placeholder="Grade (English)"
+					{...register("grade.en")}
 					error={formState.errors.grade?.message}
 				/>
 				<Input
-					placeholder="Scheme"
-					{...register("scheme")}
+					placeholder="Grade (Arabic)"
+					{...register("grade.ar")}
+					error={formState.errors.grade?.message}
+				/>
+				<Input
+					placeholder="Scheme (English)"
+					{...register("scheme.en")}
+					error={formState.errors.scheme?.message}
+				/>
+				<Input
+					placeholder="Scheme (Arabic)"
+					{...register("scheme.ar")}
 					error={formState.errors.scheme?.message}
 				/>
 				<Button

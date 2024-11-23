@@ -1,25 +1,26 @@
 import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
+import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
 import { IBank } from "./bank.entity";
 
 export interface ICard {
-	name: string;
+	name: Translation;
 	bank: IBank;
 	logo: string;
-	grade: string;
-	scheme: string;
+	grade: Translation;
+	scheme: Translation;
 	status: ActiveStatusType;
 	offers: string[];
 	id: string;
 }
 
 export class Card {
-	name: string;
+	name: Translation;
 	bank: IBank;
 	logo: string;
-	grade: string;
-	scheme: string;
+	grade: Translation;
+	scheme: Translation;
 	status: ActiveStatusType;
 	offers: string[];
 	id: string;

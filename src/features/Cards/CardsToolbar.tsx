@@ -41,7 +41,7 @@ const CardsToolbar = observer(({ onAdd }: Props) => {
 				<SelectContent>
 					<SelectItem value="All">All</SelectItem>
 					{banks.map((item) => (
-						<SelectItem value={item.name}>{item.name}</SelectItem>
+						<SelectItem value={item.name.en}>{item.name.en}</SelectItem>
 					))}
 				</SelectContent>
 			</Select>
