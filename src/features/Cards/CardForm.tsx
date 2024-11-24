@@ -65,12 +65,12 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 				<Input
 					placeholder="Name (English)"
 					{...register("name.en")}
-					error={formState.errors.name?.message}
+					error={formState.errors.name?.en?.message}
 				/>
 				<Input
 					placeholder="Name (Arabic)"
 					{...register("name.ar")}
-					error={formState.errors.name?.message}
+					error={formState.errors.name?.ar?.message}
 				/>
 				<Select
 					value={getValues().bank}
@@ -90,22 +90,22 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 				<Input
 					placeholder="Grade (English)"
 					{...register("grade.en")}
-					error={formState.errors.grade?.message}
+					error={formState.errors.grade?.en?.message}
 				/>
 				<Input
 					placeholder="Grade (Arabic)"
 					{...register("grade.ar")}
-					error={formState.errors.grade?.message}
+					error={formState.errors.grade?.ar?.message}
 				/>
 				<Input
 					placeholder="Scheme (English)"
 					{...register("scheme.en")}
-					error={formState.errors.scheme?.message}
+					error={formState.errors.scheme?.en?.message}
 				/>
 				<Input
 					placeholder="Scheme (Arabic)"
 					{...register("scheme.ar")}
-					error={formState.errors.scheme?.message}
+					error={formState.errors.scheme?.ar?.message}
 				/>
 				<Button
 					disabled={!submittable}

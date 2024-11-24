@@ -97,10 +97,10 @@ const OfferCard = observer(({ offer }: Props) => {
 			</CardHeader>
 			<CardContent className="flex flex-col space-y-4">
 				<MarkdownPreview className="font-bold text-lg">
-					{offer.title}
+					{offer.title.en}
 				</MarkdownPreview>
 				<MarkdownPreview className="text-gray-500">
-					{offer.description}
+					{offer.description.en}
 				</MarkdownPreview>
 				<a
 					href={offer.offer_source_link}

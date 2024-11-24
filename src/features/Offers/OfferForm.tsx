@@ -12,6 +12,7 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@/components/ui/select";
+import { languagesSchema } from "@/constants/constants";
 import { CategoriesService } from "@/services/categories.service";
 import { cardsStore } from "@/stores";
 import { numberValidator } from "@/utils/utils";
@@ -22,10 +23,8 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 const schema = z.object({
-	terms_and_conditions: z.string({
-		message: "Terms and conditions are required",
-	}),
-	description: z.string({ message: "Description is required" }),
+	terms_and_conditions: languagesSchema,
+	description: languagesSchema,
 	starting_date: z.coerce.date().optional(),
 	expiry_date: z.coerce.date(),
 	minimum_amount: z.string().optional().refine(numberValidator),
@@ -38,7 +37,7 @@ const schema = z.object({
 		message: "Applicable cards are required",
 	}),
 	offer_source_link: z.string({ message: "Offer source link is required" }),
-	title: z.string({ message: "Title is required" }),
+	title: languagesSchema,
 });
 
 export type OfferFormValues = z.infer<typeof schema>;
@@ -63,7 +62,7 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 
 	return (
 		<DialogContent
-			style={{ width: "95vw", maxWidth: "100vw" }}
+			className="h-[80vh] overflow-auto"
 			onCloseAutoFocus={() => reset()}
 		>
 			<ImageUpload
@@ -74,30 +73,51 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 				dims={{ width: 200, height: 200 }}
 			/>
 
-			<div className="grid grid-cols-4 grid-rows-2 gap-4">
+			<>
 				<Input
-					placeholder="Title"
-					{...register("title")}
-					error={formState.errors.title?.message}
+					placeholder="Title (English)"
+					{...register("title.en")}
+					error={formState.errors.title?.en?.message}
+				/>
+				<Input
+					placeholder="Title (Arabic)"
+					{...register("title.ar")}
+					error={formState.errors.title?.ar?.message}
 				/>
 				<MarkdownEditor
-					placeholder="Description"
-					value={getValues().description}
+					placeholder="Description (English)"
+					value={getValues()?.description?.en}
 					onChange={(value) =>
-						setValue("description", value, { shouldValidate: true })
+						setValue("description.en", value, { shouldValidate: true })
 					}
-					error={formState.errors.description?.message}
+					error={formState.errors.description?.en?.message}
 				/>
 				<MarkdownEditor
-					placeholder="Terms & Conditions"
-					value={getValues().terms_and_conditions}
+					placeholder="Description (Arabic)"
+					value={getValues()?.description?.ar}
 					onChange={(value) =>
-						setValue("terms_and_conditions", value, { shouldValidate: true })
+						setValue("description.ar", value, { shouldValidate: true })
 					}
-					error={formState.errors.terms_and_conditions?.message}
+					error={formState.errors.description?.ar?.message}
+				/>
+				<MarkdownEditor
+					placeholder="Terms & Conditions (English)"
+					value={getValues()?.terms_and_conditions?.en}
+					onChange={(value) =>
+						setValue("terms_and_conditions.en", value, { shouldValidate: true })
+					}
+					error={formState.errors.terms_and_conditions?.en?.message}
+				/>
+				<MarkdownEditor
+					placeholder="Terms & Conditions (Arabic)"
+					value={getValues()?.terms_and_conditions?.ar}
+					onChange={(value) =>
+						setValue("terms_and_conditions.ar", value, { shouldValidate: true })
+					}
+					error={formState.errors.terms_and_conditions?.ar?.message}
 				/>
 				<Select
-					value={getValues().channel}
+					value={getValues()?.channel}
 					onValueChange={(value: "online" | "offline") =>
 						setValue("channel", value, { shouldValidate: true })
 					}
@@ -160,7 +180,7 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 				<MultiSelect
 					error={formState.errors.applicable_cards?.message}
 					options={cards.map((card) => ({
-						label: card.name,
+						label: card.name.en,
 						value: card.id,
 					}))}
 					defaultValue={getValues().applicable_cards}
@@ -170,7 +190,7 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 					}
 					placeholder="Cards"
 				/>
-			</div>
+			</>
 			<Button
 				disabled={!submittable}
 				onClick={handleSubmit(onSubmit)}

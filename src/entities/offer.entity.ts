@@ -1,14 +1,15 @@
 import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
+import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
 
 export interface IOffer {
 	id: string;
-	terms_and_conditions: string;
+	terms_and_conditions: Translation;
 	starting_date?: Date;
 	expiry_date: Date;
 	minimum_amount?: number;
-	description: string;
+	description: Translation;
 	cap?: number;
 	discount_code?: string;
 	logo?: string;
@@ -17,17 +18,17 @@ export interface IOffer {
 	applicable_cards: string[];
 	offer_source_link: string;
 	status: ActiveStatusType;
-	title: string;
+	title: Translation;
 }
 
 export class Offer {
 	id: string;
-	title: string;
-	terms_and_conditions: string;
+	title: Translation;
+	terms_and_conditions: Translation;
 	starting_date?: Date;
 	expiry_date: Date;
 	minimum_amount?: number;
-	description: string;
+	description: Translation;
 	cap?: number;
 	discount_code?: string;
 	logo?: string;
