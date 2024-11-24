@@ -50,6 +50,7 @@ const PrivateLayout = observer((props: Props) => {
 			</div>
 		);
 	}
+	console.log(user.username);
 
 	return (
 		<SidebarProvider>

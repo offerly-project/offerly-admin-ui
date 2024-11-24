@@ -11,13 +11,30 @@ export class UserStore {
 	rootStore: RootStore;
 	authenticated: boolean = false;
 	user: IUser = {} as IUser;
+	initialising: boolean = true;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);
 	}
 
-	async login(username: string, password: string) {
+	initialize = () => {
+		const token = localStorage.getItem("token");
+		const user = localStorage.getItem("user");
+		const rememberMe = localStorage.getItem("remember_me") === "true";
+		if (rememberMe && token && user) {
+			AxiosAuthInterceptor.addBearerTokenInterceptor(token);
+			this.authenticated = true;
+			this.user = {
+				username: JSON.parse(user),
+			};
+		}
+		runInAction(() => {
+			this.initialising = false;
+		});
+	};
+
+	async login(username: string, password: string, rememberMe: boolean) {
 		return axiosInstance
 			.post(
 				"/admin/auth/login",
@@ -27,23 +44,40 @@ export class UserStore {
 				},
 				{ withCredentials: true }
 			)
-			.then((res: AxiosResponse<{ user: string; token: string }>) => {
-				runInAction(() => {
-					const { user, token } = res.data;
-					this.user = {
-						username: user,
-					};
+			.then(
+				(
+					res: AxiosResponse<{
+						user: string;
+						token: string;
+					}>
+				) => {
+					runInAction(() => {
+						const { user, token } = res.data;
+						this.user = {
+							username: user,
+						};
+						AxiosAuthInterceptor.addBearerTokenInterceptor(token);
+						if (rememberMe) {
+							localStorage.setItem("remember_me", "true");
+							localStorage.setItem("token", token);
+							localStorage.setItem("user", JSON.stringify(user));
+						} else {
+							localStorage.removeItem("remember_me");
+							localStorage.removeItem("token");
+							localStorage.removeItem("user");
+						}
 
-					AxiosAuthInterceptor.addBearerTokenInterceptor(token);
-
-					this.authenticated = true;
-				});
-			});
+						this.authenticated = true;
+					});
+				}
+			);
 	}
 
 	logout() {
 		this.authenticated = false;
 		AxiosAuthInterceptor.removeBearerTokenInterceptor();
+		localStorage.removeItem("token");
+		localStorage.removeItem("user");
 		this.user = {} as IUser;
 	}
 }
