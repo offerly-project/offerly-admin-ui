@@ -1,7 +1,7 @@
 import { axiosInstance } from "@/configs/configs";
 import { Bank, IBank } from "@/entities/bank.entity";
 import { AxiosResponse } from "axios";
-import { makeAutoObservable } from "mobx";
+import { makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
 export class BanksStore {
@@ -16,10 +16,12 @@ export class BanksStore {
 
 	fetchBanks = async () => {
 		const res: AxiosResponse<IBank[]> = await axiosInstance.get("/admin/banks");
-		this._banks = res.data.reduce((acc, bank) => {
-			acc[bank.id] = new Bank(bank);
-			return acc;
-		}, {} as { [id: string]: Bank });
+		runInAction(() => {
+			this._banks = res.data.reduce((acc, bank) => {
+				acc[bank.id] = new Bank(bank);
+				return acc;
+			}, {} as { [id: string]: Bank });
+		});
 	};
 
 	updateFilter = (query: string) => {

@@ -18,16 +18,25 @@ export class UserStore {
 		makeAutoObservable(this);
 	}
 
-	initialize = () => {
+	initialize = async () => {
 		const token = localStorage.getItem("token");
 		const user = localStorage.getItem("user");
 		const rememberMe = localStorage.getItem("remember_me") === "true";
 		if (rememberMe && token && user) {
 			AxiosAuthInterceptor.addBearerTokenInterceptor(token);
-			this.authenticated = true;
-			this.user = {
-				username: JSON.parse(user),
-			};
+			await axiosInstance
+				.get("/admin/auth")
+				.then(() => {
+					runInAction(() => {
+						this.authenticated = true;
+						this.user = {
+							username: JSON.parse(user),
+						};
+					});
+				})
+				.catch(() => {
+					AxiosAuthInterceptor.removeBearerTokenInterceptor();
+				});
 		}
 		runInAction(() => {
 			this.initialising = false;
