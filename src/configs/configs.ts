@@ -2,8 +2,12 @@ import axios from "axios";
 
 const isProduction = import.meta.env.MODE === "production";
 
+export const BASE_URL = isProduction
+	? "/api"
+	: import.meta.env.VITE_API_BASE_URL;
+
 export const axiosInstance = axios.create({
-	baseURL: isProduction ? "/api" : import.meta.env.VITE_API_BASE_URL,
+	baseURL: BASE_URL,
 });
 
 export class AxiosAuthInterceptor {

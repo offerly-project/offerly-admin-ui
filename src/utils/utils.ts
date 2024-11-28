@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/configs/configs";
 import { BankType } from "@/entities/bank.entity";
 import { Toast } from "@/hooks/use-toast";
 import { AxiosError } from "axios";
@@ -19,8 +20,7 @@ export const createErrorToastObject = (err: Error): Toast => {
 	return { title: "Error", description: defaultErrorMessage };
 };
 
-export const formatAssetPath = (path: string) =>
-	`${import.meta.env.VITE_API_BASE_URL}/static${path}`;
+export const formatAssetPath = (path: string) => `${BASE_URL}/static${path}`;
 
 export const createFileObject = async (url: string) => {
 	if (!url) return null;
