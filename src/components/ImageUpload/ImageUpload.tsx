@@ -6,7 +6,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { BarLoader } from "react-spinners";
 import { Button } from "../ui/button";
 import { Card } from "../ui/card";
-import styles from "./ImageUpload.module.scss";
+import styles from "./ImageUpload.module.css";
 
 type Props = {
 	pathPrefix: string;

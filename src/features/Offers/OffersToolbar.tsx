@@ -27,7 +27,10 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 			</DialogTrigger>
 			<Input placeholder="Search..." style={{ width: 250 }} />
 			<MultiSelect
-				options={cards.map((card) => ({ label: card.name, value: card.id }))}
+				options={cards.map((card) => ({
+					label: card.name as unknown as string,
+					value: card.id,
+				}))}
 				onValueChange={setBanksQuery}
 				placeholder="Cards"
 			/>
