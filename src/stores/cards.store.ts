@@ -44,6 +44,10 @@ export class CardsStore {
 		});
 	};
 
+	get pureCards() {
+		return Object.values(this._cards);
+	}
+
 	get cards() {
 		let filteredCards = Object.values(this._cards);
 

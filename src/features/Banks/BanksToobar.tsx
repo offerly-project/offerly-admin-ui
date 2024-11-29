@@ -24,6 +24,7 @@ const BanksToolbar = ({ onAdd }: Props) => {
 			<Input
 				className="w-100 inline-block"
 				placeholder="Search..."
+				value={banksStore().filter}
 				onChange={onSearchChange}
 			/>
 		</Toolbar>

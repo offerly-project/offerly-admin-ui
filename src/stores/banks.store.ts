@@ -7,7 +7,7 @@ import { RootStore } from ".";
 export class BanksStore {
 	private rootStore: RootStore;
 	private _banks: Record<string, Bank> = {};
-	private _query: string = "";
+	public filter: string = "";
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -25,14 +25,18 @@ export class BanksStore {
 	};
 
 	updateFilter = (query: string) => {
-		this._query = query;
+		this.filter = query;
 	};
+
+	get pureBanks() {
+		return Object.values(this._banks);
+	}
 
 	get banks() {
 		const banksArray = Object.values(this._banks);
-		if (this._query) {
+		if (this.filter) {
 			return banksArray.filter((bank) =>
-				bank.name.en.toLowerCase().includes(this._query.toLowerCase())
+				bank.name.en.toLowerCase().includes(this.filter.toLowerCase())
 			);
 		}
 		return banksArray;

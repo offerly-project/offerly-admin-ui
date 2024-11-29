@@ -19,7 +19,7 @@ type Props = {
 };
 
 const CardsToolbar = observer(({ onAdd }: Props) => {
-	const { banks } = banksStore();
+	const { pureBanks } = banksStore();
 	const { updateFilter, updateSearch, query } = cardsStore();
 	return (
 		<Toolbar>
@@ -34,13 +34,16 @@ const CardsToolbar = observer(({ onAdd }: Props) => {
 				value={query.search}
 				onChange={(e) => updateSearch(e.target.value)}
 			/>
-			<Select value={query.bank} onValueChange={(value) => updateFilter(value)}>
+			<Select
+				defaultValue={query.bank}
+				onValueChange={(value) => updateFilter(value)}
+			>
 				<SelectTrigger>
 					<SelectValue placeholder="Bank" />
 				</SelectTrigger>
 				<SelectContent>
 					<SelectItem value="All">All</SelectItem>
-					{banks.map((item) => (
+					{pureBanks.map((item) => (
 						<SelectItem value={item.name.en}>{item.name.en}</SelectItem>
 					))}
 				</SelectContent>

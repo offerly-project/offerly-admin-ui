@@ -14,9 +14,10 @@ type Props = {
 };
 
 const OffersToolbar = observer(({ onAdd }: Props) => {
-	const cards = cardsStore().cards;
+	const cards = cardsStore().pureCards;
 
-	const { setCardsQuery: setBanksQuery, setCategoriesQuery } = offersStore();
+	const { setCardsQuery, setCategoriesQuery, setSearchQuery, query } =
+		offersStore();
 	const categories = CategoriesService.categories;
 	return (
 		<Toolbar>
@@ -25,13 +26,19 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 					<FontAwesomeIcon icon={faAdd} />
 				</Button>
 			</DialogTrigger>
-			<Input placeholder="Search..." style={{ width: 250 }} />
+			<Input
+				placeholder="Search..."
+				style={{ width: 250 }}
+				value={query.search}
+				onChange={(e) => setSearchQuery(e.target.value)}
+			/>
 			<MultiSelect
 				options={cards.map((card) => ({
-					label: card.name as unknown as string,
+					label: card.name.en,
 					value: card.id,
 				}))}
-				onValueChange={setBanksQuery}
+				defaultValue={query.cards}
+				onValueChange={setCardsQuery}
 				placeholder="Cards"
 			/>
 			<MultiSelect
@@ -39,6 +46,7 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 					label: category,
 					value: category,
 				}))}
+				defaultValue={query.categories}
 				placeholder="Categories"
 				onValueChange={setCategoriesQuery}
 			/>

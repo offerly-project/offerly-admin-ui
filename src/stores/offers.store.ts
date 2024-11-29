@@ -9,6 +9,7 @@ import { RootStore } from ".";
 type Query = {
 	cards: string[];
 	categories: string[];
+	search: string;
 };
 
 export class OffersStore {
@@ -17,6 +18,7 @@ export class OffersStore {
 	query: Query = {
 		cards: [],
 		categories: [],
+		search: "",
 	};
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -83,8 +85,23 @@ export class OffersStore {
 				)
 			);
 		}
+
+		if (this.query.search) {
+			offers = offers.filter(
+				(offer) =>
+					offer.offer_source_link.includes(this.query.search) ||
+					offer.title.en.includes(this.query.search) ||
+					offer.description.en.includes(this.query.search) ||
+					offer.terms_and_conditions.en.includes(this.query.search)
+			);
+		}
+
 		return offers;
 	}
+
+	setSearchQuery = (search: string) => {
+		this.query.search = search;
+	};
 
 	setCardsQuery = (cards: string[]) => {
 		this.query.cards = cards;

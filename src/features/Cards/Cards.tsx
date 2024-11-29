@@ -12,7 +12,7 @@ import CardsToolbar from "./CardsToolbar";
 type Props = {};
 
 const Cards = observer((props: Props) => {
-	const { cards } = cardsStore();
+	const { cards: cards } = cardsStore();
 	const [open, setOpen] = useState(false);
 	const { toast } = useToast();
 	const onNewCardSubmit = async (values: CardFormValues) => {
