@@ -18,7 +18,7 @@ import { cardsStore } from "@/stores";
 import { numberValidator } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 
@@ -48,17 +48,34 @@ type Props = {
 };
 
 const OfferForm = ({ onSubmit, initialValues }: Props) => {
-	const { formState, handleSubmit, getValues, setValue, register, reset } =
-		useForm({
-			resolver: zodResolver(schema),
-			values: initialValues,
-		});
+	const {
+		formState,
+		handleSubmit,
+		getValues,
+		setValue,
+		register,
+		setError,
+		reset,
+		clearErrors,
+	} = useForm({
+		resolver: zodResolver(schema),
+		values: initialValues,
+	});
+
+	console.log(formState.errors);
 
 	const [uploading, setUploading] = useState(false);
 	const submittable = !uploading && isEmpty(formState.errors);
 
 	const categories = CategoriesService.categories;
 	const cards = cardsStore().cards;
+
+	useEffect(() => {
+		register("description.en");
+		register("description.ar");
+		register("terms_and_conditions.en");
+		register("terms_and_conditions.ar");
+	}, []);
 
 	return (
 		<DialogContent
@@ -87,9 +104,11 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 				<MarkdownEditor
 					placeholder="Description (English)"
 					value={getValues()?.description?.en}
-					onChange={(value) =>
-						setValue("description.en", value, { shouldValidate: true })
-					}
+					onChange={(value) => {
+						setValue("description.en", value, {
+							shouldValidate: true,
+						});
+					}}
 					error={formState.errors.description?.en?.message}
 				/>
 				<MarkdownEditor
