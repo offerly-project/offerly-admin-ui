@@ -59,6 +59,7 @@ const MarkdownEditor = ({
 						setState(val || "");
 					}}
 					className="w-full h-[300px] bg-transparent"
+					data-color-mode={"dark"}
 					commands={[
 						commands.bold,
 						commands.italic,
