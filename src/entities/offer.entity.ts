@@ -1,5 +1,5 @@
 import { axiosInstance } from "@/configs/configs";
-import { ActiveStatusType } from "@/ts/api.types";
+import { ActiveStatusType, ChannelType } from "@/ts/api.types";
 import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
 
@@ -13,7 +13,7 @@ export interface IOffer {
 	cap?: number;
 	discount_code?: string;
 	logo?: string;
-	channel: "online" | "offline";
+	channels: ChannelType[];
 	categories: string[];
 	applicable_cards: string[];
 	offer_source_link: string;
@@ -32,7 +32,7 @@ export class Offer {
 	cap?: number;
 	discount_code?: string;
 	logo?: string;
-	channel: "online" | "offline";
+	channels: ChannelType[];
 	categories: string[];
 	applicable_cards: string[];
 	offer_source_link: string;
@@ -48,7 +48,7 @@ export class Offer {
 		this.cap = offer.cap;
 		this.discount_code = offer.discount_code;
 		this.logo = offer.logo;
-		this.channel = offer.channel;
+		this.channels = offer.channels;
 		this.categories = offer.categories;
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;
@@ -65,7 +65,7 @@ export class Offer {
 		this.cap = offer.cap;
 		this.discount_code = offer.discount_code;
 		this.logo = offer.logo;
-		this.channel = offer.channel;
+		this.channels = offer.channels;
 		this.categories = offer.categories;
 		this.applicable_cards = offer.applicable_cards;
 		this.offer_source_link = offer.offer_source_link;

@@ -49,8 +49,10 @@ const OfferCard = observer(({ offer }: Props) => {
 	}, [offer.cap, offer.minimum_amount]);
 
 	const channelFmt = useMemo(() => {
-		return offer.channel === "online" ? "Online" : "Offline";
-	}, [offer.channel]);
+		return offer.channels
+			.map((channel) => (channel === "in-store" ? "In Store" : "Online"))
+			.join(" - ");
+	}, [offer.channels]);
 
 	const categoriesFmt = useMemo(() => {
 		return offer.categories.join(" - ");
@@ -151,7 +153,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								expiry_date: offer.expiry_date,
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
-								channel: offer.channel,
+								channels: offer.channels,
 								categories: offer.categories,
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,
