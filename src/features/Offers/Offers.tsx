@@ -28,7 +28,7 @@ const Offers = observer((props: Props) => {
 		<div className="flex-col flex space-y-5">
 			<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
 				<OffersToolbar onAdd={() => setOpen(true)} />
-				<OfferForm onSubmit={onNewOfferSubmit} />
+				<OfferForm onSubmit={onNewOfferSubmit} open={open} />
 			</Dialog>
 			<div className="flex flex-col space-y-10">
 				{offers.map((offer) => (
