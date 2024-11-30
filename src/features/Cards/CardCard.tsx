@@ -43,7 +43,7 @@ const CardCard = observer(({ card }: Props) => {
 			<CardHeader className="flex-row">
 				<CardImage
 					className="m-auto"
-					styles={{ height: 100, width: 200 }}
+					styles={{ height: 275 / 2, width: 450 / 2 }}
 					alt="C"
 					src={
 						card.logo

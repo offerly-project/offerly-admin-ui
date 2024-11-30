@@ -102,6 +102,9 @@ const OfferCard = observer(({ offer }: Props) => {
 				<MarkdownPreview className="text-gray-500">
 					{offer.description.en}
 				</MarkdownPreview>
+				<MarkdownPreview className="text-gray-500">
+					{offer.terms_and_conditions.en}
+				</MarkdownPreview>
 				<a
 					href={offer.offer_source_link}
 					className="text-blue-400 border-b w-fit pb-1 border-blue-400 cursor-pointer"
@@ -148,7 +151,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								expiry_date: offer.expiry_date,
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
-								channel: offer.channel,
+								channels: offer.channel,
 								categories: offer.categories,
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,

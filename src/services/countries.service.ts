@@ -8,9 +8,11 @@ export class CountriesService {
 		if (!CountriesService.countries) {
 			const response = await axiosInstance.get("/static/countries.json");
 
-			CountriesService.countries = response.data;
+			const data = response ? response.data : [];
 
-			CountriesService.list = response.data.map((country: string) => ({
+			CountriesService.countries = data;
+
+			CountriesService.list = data.map((country: string) => ({
 				value: country,
 				name: country,
 			}));

@@ -20,7 +20,7 @@ export const createErrorToastObject = (err: Error): Toast => {
 	return { title: "Error", description: defaultErrorMessage };
 };
 
-export const formatAssetPath = (path: string) => `${BASE_URL}/static${path}`;
+export const formatAssetPath = (path: string) => `${BASE_URL}/uploads${path}`;
 
 export const createFileObject = async (url: string) => {
 	if (!url) return null;

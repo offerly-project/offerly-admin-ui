@@ -7,10 +7,11 @@ export class CategoriesService {
 	static populate = async () => {
 		if (!CategoriesService.categories) {
 			const response = await axiosInstance.get("/static/categories.json");
+			const data = response ? response.data : [];
 
-			CategoriesService.categories = response.data;
+			CategoriesService.categories = data;
 
-			CategoriesService.list = response.data.map((category: string) => ({
+			CategoriesService.list = data.map((category: string) => ({
 				value: category,
 				name: category,
 			}));
