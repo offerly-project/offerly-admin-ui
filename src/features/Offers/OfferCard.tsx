@@ -151,7 +151,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								expiry_date: offer.expiry_date,
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
-								channels: offer.channel,
+								channel: offer.channel,
 								categories: offer.categories,
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,

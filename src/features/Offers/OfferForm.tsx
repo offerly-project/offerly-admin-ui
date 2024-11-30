@@ -6,6 +6,7 @@ import { DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multiselect";
 import {
+	Select,
 	SelectContent,
 	SelectItem,
 	SelectTrigger,
@@ -14,7 +15,6 @@ import {
 import { languagesSchema } from "@/constants/constants";
 import { CategoriesService } from "@/services/categories.service";
 import { cardsStore } from "@/stores";
-import { ChannelType } from "@/ts/api.types";
 import { numberValidator } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { isEmpty } from "lodash";
@@ -31,7 +31,7 @@ const schema = z.object({
 	cap: z.string().optional().refine(numberValidator),
 	discount_code: z.string().optional(),
 	logo: z.string().optional(),
-	channels: z.array(z.enum(["online", "in-store"])),
+	channel: z.enum(["online", "offline"]),
 	categories: z.array(z.string(), { message: "Categories are required" }),
 	applicable_cards: z.array(z.string(), {
 		message: "Applicable cards are required",
@@ -41,8 +41,6 @@ const schema = z.object({
 });
 
 export type OfferFormValues = z.infer<typeof schema>;
-
-const channels: ChannelType[] = ["online", "in-store"];
 
 type Props = {
 	onSubmit: (values: OfferFormValues) => Promise<void>;
@@ -137,29 +135,20 @@ const OfferForm = ({ onSubmit, initialValues }: Props) => {
 					}
 					error={formState.errors.terms_and_conditions?.ar?.message}
 				/>
-				<MultiSelect
-					options={channels.map((category) => ({
-						label: category,
-						value: category,
-					}))}
-					defaultValue={getValues().channels}
-					onValueChange={(value) =>
-						setValue("channels", value as unknown as ChannelType[], {
-							shouldValidate: true,
-						})
+				<Select
+					value={getValues()?.channel}
+					onValueChange={(value: "online" | "offline") =>
+						setValue("channel", value, { shouldValidate: true })
 					}
-					value={getValues().channels}
-					placeholder="Channels"
-					error={formState.errors.channels?.message}
 				>
-					<SelectTrigger error={formState.errors.channels?.message}>
+					<SelectTrigger error={formState.errors.channel?.message}>
 						<SelectValue placeholder="Channel" />
 					</SelectTrigger>
 					<SelectContent>
 						<SelectItem value={"online"}>Online</SelectItem>
-						<SelectItem value={"in-store"}>In Store</SelectItem>
+						<SelectItem value={"offline"}>Offline</SelectItem>
 					</SelectContent>
-				</MultiSelect>
+				</Select>
 				<Input
 					placeholder="Source Link"
 					{...register("offer_source_link")}
