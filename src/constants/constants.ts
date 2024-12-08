@@ -10,3 +10,15 @@ export const languagesSchema = z.object({
 		.string({ message: "Arabic  is required" })
 		.min(1, "Arabic  is required"),
 });
+
+export const expiryDateSchema = z.string().optional().refine(
+	(value) => {
+	  if (!value) return true
+	  const dateRegex = /^(0[1-9]|[12][0-9]|3[01])\/(0[1-9]|1[0-2])\/(\d{4})$/;
+	  return dateRegex.test(value);
+	},
+	{
+	  message: "Invalid date format or value. Use YYYY/MM/DD.",
+	}
+  );
+  

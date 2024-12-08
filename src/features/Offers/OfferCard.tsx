@@ -85,36 +85,35 @@ const OfferCard = observer(({ offer }: Props) => {
 	};
 
 	return (
-		<Card>
-			<CardHeader>
+		<Card className="flex flex-row">
+			<CardHeader className="h-60 w-60">
 				<CardImage
 					src={
 						offer.logo
 							? formatAssetPath(offer.logo) + "?" + new Date().getTime()
 							: ""
 					}
-					className="w-40 h-40 m-auto"
 					alt={"logo"}
 				/>
 			</CardHeader>
-			<CardContent className="flex flex-col space-y-4">
+			<CardContent className="flex flex-col space-y-4 py-4">
 				<MarkdownPreview className="font-bold text-lg">
-					{offer.title.en}
+					{offer.title.en} 
 				</MarkdownPreview>
-				<MarkdownPreview className="text-gray-500">
+				{/* <MarkdownPreview className="text-gray-500">
 					{offer.description.en}
 				</MarkdownPreview>
 				<MarkdownPreview className="text-gray-500">
 					{offer.terms_and_conditions.en}
-				</MarkdownPreview>
-				<a
+				</MarkdownPreview> */}
+				{/* <a
 					href={offer.offer_source_link}
 					className="text-blue-400 border-b w-fit pb-1 border-blue-400 cursor-pointer"
 					target="_blank"
 				>
 					Source Link
-				</a>
-				{offer.discount_code && (
+				</a> */}
+				{/* {offer.discount_code && (
 					<p
 						className="text-green-600 border-b w-fit pb-1 border-green-600 cursor-pointer"
 						onClick={() => {
@@ -126,10 +125,10 @@ const OfferCard = observer(({ offer }: Props) => {
 					>
 						Discount Code: {offer.discount_code}
 					</p>
-				)}
+				)} */}
 				<p className="text-gray-500">{dateFmt}</p>
-				<p className="text-gray-500">Constraints: {constraintsFmt}</p>
-				<p className="text-gray-500">Channel: {channelFmt}</p>
+				{/* <p className="text-gray-500">Constraints: {constraintsFmt}</p> */}
+				{/* <p className="text-gray-500">Channel: {channelFmt}</p> */}
 				<p className="text-gray-500">Categories: {categoriesFmt}</p>
 				<StatusSwitch
 					status={offer.status}
@@ -150,7 +149,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								offer_source_link: offer.offer_source_link,
 								discount_code: offer.discount_code,
 								starting_date: offer.starting_date,
-								expiry_date: offer.expiry_date,
+								expiry_date: moment(offer.expiry_date).format("DD/MM/YYYY"),
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
 								channels: offer.channels,

@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { DatePicker } from "@/components/ui/datepicker";
 import { DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multiselect";
-import { languagesSchema } from "@/constants/constants";
+import { expiryDateSchema, languagesSchema } from "@/constants/constants";
 import { CategoriesService } from "@/services/categories.service";
 import { cardsStore } from "@/stores";
 import { ChannelType } from "@/ts/api.types";
@@ -26,11 +27,7 @@ const schema = z.object({
 			message: "Starting date is required",
 		})
 		.optional(),
-	expiry_date: z.coerce.date({
-		invalid_type_error: "Expiry date is required",
-		required_error: "Expiry date is required",
-		message: "Expiry date is required",
-	}),
+	expiry_date: expiryDateSchema,
 	minimum_amount: z.string().optional().refine(numberValidator),
 	cap: z.string().optional().refine(numberValidator),
 	discount_code: z.string().optional(),
@@ -166,14 +163,21 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 					placeholder="Channels"
 					error={formState.errors.channels?.message}
 				/>
-				<DatePicker
+				{/* <DatePicker
 					label="Expiry Date"
 					value={getValues().expiry_date}
 					onChange={(date) =>
 						date && setValue("expiry_date", date, { shouldValidate: true })
 					}
 					error={formState.errors.expiry_date?.message}
-				/>
+				/> */}
+				<div className="grid w-full max-w-sm items-center gap-3">
+					<Label className="pl-2" htmlFor="exipryDate">Exipry Date:</Label>
+					<Input id="exipryDate"  placeholder="DD/MM/YYYY" 
+					error={formState.errors.expiry_date?.message}
+					{...register("expiry_date")}
+					/>
+				</div>
 				<MultiSelect
 					options={categories.map((category) => ({
 						label: category,

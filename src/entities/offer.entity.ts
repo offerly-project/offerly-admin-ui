@@ -7,7 +7,7 @@ export interface IOffer {
 	id: string;
 	terms_and_conditions: Translation;
 	starting_date?: Date;
-	expiry_date: Date;
+	expiry_date: string;
 	minimum_amount?: number;
 	description: Translation;
 	cap?: number;
@@ -26,7 +26,7 @@ export class Offer {
 	title: Translation;
 	terms_and_conditions: Translation;
 	starting_date?: Date;
-	expiry_date: Date;
+	expiry_date: string;
 	minimum_amount?: number;
 	description: Translation;
 	cap?: number;
