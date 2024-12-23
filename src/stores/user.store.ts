@@ -20,18 +20,15 @@ export class UserStore {
 
 	initialize = async () => {
 		const token = localStorage.getItem("token");
-		const user = localStorage.getItem("user");
 		const rememberMe = localStorage.getItem("remember_me") === "true";
-		if (rememberMe && token && user) {
+		if (rememberMe && token) {
 			AxiosAuthInterceptor.addBearerTokenInterceptor(token);
 			await axiosInstance
-				.get("/admin/auth")
-				.then(() => {
+				.get("/admin/user")
+				.then((res: AxiosResponse<IUser>) => {
 					runInAction(() => {
 						this.authenticated = true;
-						this.user = {
-							username: JSON.parse(user),
-						};
+						this.user = res.data;
 					});
 				})
 				.catch(() => {
@@ -56,15 +53,13 @@ export class UserStore {
 			.then(
 				(
 					res: AxiosResponse<{
-						user: string;
+						user: IUser;
 						token: string;
 					}>
 				) => {
 					runInAction(() => {
 						const { user, token } = res.data;
-						this.user = {
-							username: user,
-						};
+						this.user = user;
 						AxiosAuthInterceptor.addBearerTokenInterceptor(token);
 						if (rememberMe) {
 							localStorage.setItem("remember_me", "true");
