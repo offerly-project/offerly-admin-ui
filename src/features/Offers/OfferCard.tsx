@@ -93,12 +93,16 @@ const OfferCard = observer(({ offer }: Props) => {
 							? formatAssetPath(offer.logo) + "?" + new Date().getTime()
 							: ""
 					}
+					styles={{
+						height: 150,
+						width: 150,
+					}}
 					alt={"logo"}
 				/>
 			</CardHeader>
 			<CardContent className="flex flex-col space-y-4 py-4">
 				<MarkdownPreview className="font-bold text-lg">
-					{offer.title.en} 
+					{offer.title.en}
 				</MarkdownPreview>
 				{/* <MarkdownPreview className="text-gray-500">
 					{offer.description.en}

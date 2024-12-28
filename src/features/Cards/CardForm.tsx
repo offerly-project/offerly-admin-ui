@@ -57,6 +57,7 @@ const CardForm = ({ initialValues, onSubmit }: Props) => {
 					onChange={function (path: string): void {
 						setValue("logo", path, { shouldValidate: true });
 					}}
+					cut
 					onUploadStateChange={(uploading) => {
 						setUploading(uploading);
 					}}

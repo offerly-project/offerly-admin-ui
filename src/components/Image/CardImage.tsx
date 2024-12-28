@@ -11,11 +11,18 @@ const CardImage = ({ src, alt, className, styles = {} }: Props) => {
 	return (
 		<div
 			className={className}
-			style={{ overflow: "hidden", borderRadius: 10, ...styles }}
+			style={{
+				overflow: "hidden",
+				borderRadius: 10,
+				...styles,
+
+				backgroundImage: `url(${src})`,
+				backgroundSize: "cover",
+				backgroundPosition: "center",
+				backgroundRepeat: "no-repeat",
+			}}
 		>
-			{src ? (
-				<img className="h-full w-full" src={src} alt="logo" style={styles} />
-			) : (
+			{!src && (
 				<Card className="h-full w-full grid place-items-center">
 					<p className="font-bold text-2xl">{alt}</p>
 				</Card>
