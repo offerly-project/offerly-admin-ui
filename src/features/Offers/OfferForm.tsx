@@ -88,7 +88,7 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 
 	return (
 		<DialogContent
-			className="h-[80vh] overflow-auto"
+			className="h-[90vh] overflow-auto"
 			onCloseAutoFocus={() => reset()}
 		>
 			{/* Required Fields */}
