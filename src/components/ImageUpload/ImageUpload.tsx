@@ -17,7 +17,7 @@ type Props = {
 		height: number;
 		width: number;
 	};
-	cut?: boolean;
+	fit?: boolean;
 };
 
 const ImageUpload = ({
@@ -26,7 +26,7 @@ const ImageUpload = ({
 	onChange,
 	onUploadStateChange,
 	dims,
-	cut = false,
+	fit = false,
 }: Props) => {
 	const [loading, setLoading] = useState(true);
 	const inputRef = useRef<HTMLInputElement>(null);
@@ -63,8 +63,11 @@ const ImageUpload = ({
 		const formData = new FormData();
 		const image = e.target.files![0];
 		const storePath = path ? path : `${pathPrefix}/${randomId()}.png`;
-		if (dims && cut) {
+		if (dims) {
 			formData.append("dims", `${dims.width}x${dims.height}`);
+		}
+		if (fit) {
+			formData.append("fit", "true");
 		}
 		formData.append("image", image);
 		formData.append("path", storePath);
@@ -99,23 +102,22 @@ const ImageUpload = ({
 			onClick={() => inputRef.current?.click()}
 		>
 			{imageUrl ? (
-				<div
-					style={{
-						backgroundImage: `url(${imageUrl})`,
-						backgroundSize: "cover",
-						backgroundPosition: "center",
-						backgroundRepeat: "no-repeat",
-						borderRadius: 24,
-						width: "100%",
-						height: "100%",
-					}}
-				>
+				<>
+					<img
+						src={imageUrl}
+						style={{
+							height: height - 50,
+							width: width - 50,
+							opacity: uploading ? 0.5 : 1,
+						}}
+						className="rounded-lg"
+					/>
 					{uploading && (
 						<div className={styles.progress_bar_container}>
 							<BarLoader color="white" />
 						</div>
 					)}
-				</div>
+				</>
 			) : (
 				<Button variant={"ghost"} className="h-full w-full">
 					<div className="flex flex-row gap-2 items-center justify-center opacity-50">

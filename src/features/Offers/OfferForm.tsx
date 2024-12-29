@@ -96,6 +96,7 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 				<ImageUpload
 					pathPrefix={"/offers"}
 					path={getValues().logo}
+					fit
 					onUploadStateChange={setUploading}
 					onChange={(value) =>
 						setValue("logo", value, { shouldValidate: true })
@@ -172,10 +173,14 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 					error={formState.errors.expiry_date?.message}
 				/> */}
 				<div className="grid w-full max-w-sm items-center gap-3">
-					<Label className="pl-2" htmlFor="exipryDate">Exipry Date:</Label>
-					<Input id="exipryDate"  placeholder="DD/MM/YYYY" 
-					error={formState.errors.expiry_date?.message}
-					{...register("expiry_date")}
+					<Label className="pl-2" htmlFor="exipryDate">
+						Exipry Date:
+					</Label>
+					<Input
+						id="exipryDate"
+						placeholder="DD/MM/YYYY"
+						error={formState.errors.expiry_date?.message}
+						{...register("expiry_date")}
 					/>
 				</div>
 				<MultiSelect

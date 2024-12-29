@@ -58,7 +58,6 @@ const BankForm = ({ initialValues, onSubmit }: Props) => {
 						onChange={(path) => {
 							setValue("logo", path, { shouldValidate: true });
 						}}
-						cut
 						dims={{ height: 400, width: 400 }}
 						onUploadStateChange={(uploading) => {
 							setUploading(uploading);
