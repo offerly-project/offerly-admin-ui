@@ -10,4 +10,3 @@ COPY . .
 
 RUN npm run build
 
-ENTRYPOINT ["tail", "-f", "/dev/null"]
