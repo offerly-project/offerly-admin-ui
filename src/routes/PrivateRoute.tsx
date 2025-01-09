@@ -8,7 +8,7 @@ type Props = {};
 const PrivateRoute = observer((props: Props) => {
 	const { authenticated } = userStore();
 	if (!authenticated) {
-		return <Navigate to="/login" />;
+		return <Navigate to="/admin/login" />;
 	}
 
 	return <PrivateLayout />;
