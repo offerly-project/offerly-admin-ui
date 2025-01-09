@@ -5,6 +5,7 @@ import {
 	Route,
 	RouterProvider,
 } from "react-router-dom";
+import { isProduction } from "./configs/configs";
 import Banks from "./features/Banks/Banks";
 import Cards from "./features/Cards/Cards";
 import Offers from "./features/Offers/Offers";
@@ -14,17 +15,20 @@ import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 import { CategoriesService } from "./services/categories.service";
 import { CountriesService } from "./services/countries.service";
+import { routeFmt } from "./utils/utils";
+
+export const ROUTE_PREFIX = isProduction ? "/admin" : "/";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/admin" element={<RootLayout />}>
-			<Route path="/admin" element={<PrivateRoute />}>
-				<Route path="/admin/banks" element={<Banks />}></Route>
-				<Route path="/admin/cards" element={<Cards />}></Route>
-				<Route path="/admin/offers" element={<Offers />}></Route>
+		<Route path={ROUTE_PREFIX} element={<RootLayout />}>
+			<Route path={ROUTE_PREFIX} element={<PrivateRoute />}>
+				<Route path={routeFmt("/banks")} element={<Banks />}></Route>
+				<Route path={routeFmt("/cards")} element={<Cards />}></Route>
+				<Route path={routeFmt("/offers")} element={<Offers />}></Route>
 			</Route>
-			<Route path="/admin" element={<PublicRoute />}>
-				<Route path="/admin/login" element={<LoginPage />}></Route>
+			<Route path={ROUTE_PREFIX} element={<PublicRoute />}>
+				<Route path={routeFmt("/login")} element={<LoginPage />}></Route>
 			</Route>
 		</Route>
 	)

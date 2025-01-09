@@ -1,3 +1,4 @@
+import { ROUTE_PREFIX } from "@/App";
 import { BASE_URL } from "@/configs/configs";
 import { BankType } from "@/entities/bank.entity";
 import { Toast } from "@/hooks/use-toast";
@@ -45,4 +46,8 @@ export const randomId = () => v4();
 export const numberValidator = (value: string | undefined) => {
 	if (value === "" || value === undefined) return true;
 	return isNumber(+value);
+};
+
+export const routeFmt = (route: string) => {
+	return ROUTE_PREFIX + route;
 };

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const isProduction = import.meta.env.MODE === "production";
+export const isProduction = import.meta.env.MODE === "production";
 
 export const BASE_URL = isProduction
 	? "http://offerly.me/api"
