@@ -12,6 +12,7 @@ import {
 	SidebarProvider,
 } from "@/components/ui/sidebar";
 import { banksStore, cardsStore, offersStore, userStore } from "@/stores";
+import { routeFmt } from "@/utils/utils";
 import {
 	faBank,
 	faCreditCard,
@@ -29,7 +30,7 @@ const PrivateLayout = observer((props: Props) => {
 	const { user } = userStore();
 	const navigate = useNavigate();
 	const routeHandler = (str: string) => () => {
-		navigate(str);
+		navigate(routeFmt(str));
 	};
 	const [loading, setLoading] = useState(true);
 
