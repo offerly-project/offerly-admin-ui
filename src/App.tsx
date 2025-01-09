@@ -17,14 +17,14 @@ import { CountriesService } from "./services/countries.service";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path="/" element={<RootLayout />}>
-			<Route path="/" element={<PrivateRoute />}>
-				<Route path="/banks" element={<Banks />}></Route>
-				<Route path="/cards" element={<Cards />}></Route>
-				<Route path="/offers" element={<Offers />}></Route>
+		<Route path="/admin" element={<RootLayout />}>
+			<Route element={<PrivateRoute />}>
+				<Route path="banks" element={<Banks />}></Route>
+				<Route path="cards" element={<Cards />}></Route>
+				<Route path="offers" element={<Offers />}></Route>
 			</Route>
-			<Route path="/" element={<PublicRoute />}>
-				<Route path="/login" element={<LoginPage />}></Route>
+			<Route element={<PublicRoute />}>
+				<Route path="login" element={<LoginPage />}></Route>
 			</Route>
 		</Route>
 	)
