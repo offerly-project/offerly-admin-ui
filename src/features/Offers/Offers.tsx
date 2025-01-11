@@ -1,3 +1,4 @@
+import Grid from "@/components/Grid/Grid";
 import { Dialog } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
 import { offersStore } from "@/stores";
@@ -30,11 +31,11 @@ const Offers = observer((props: Props) => {
 				<OffersToolbar onAdd={() => setOpen(true)} />
 				<OfferForm onSubmit={onNewOfferSubmit} open={open} />
 			</Dialog>
-			<div className="grid grid-cols-2 space-x-6">
+			<Grid>
 				{offers.map((offer) => (
 					<OfferCard key={offer.id} offer={offer} />
 				))}
-			</div>
+			</Grid>
 		</div>
 	);
 });

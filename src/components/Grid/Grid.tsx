@@ -4,7 +4,7 @@ type Props = {
 
 const Grid = ({ children }: Props) => {
 	return (
-		<div className="flex gap-10 flex-row flex-wrap items-center justify-evenly">
+		<div className="flex gap-10 flex-row flex-wrap items-start justify-between m-auto">
 			{children}
 		</div>
 	);

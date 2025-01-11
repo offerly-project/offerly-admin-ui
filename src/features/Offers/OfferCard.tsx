@@ -85,7 +85,7 @@ const OfferCard = observer(({ offer }: Props) => {
 	};
 
 	return (
-		<Card className="flex flex-row">
+		<Card className="flex flex-row w-[45%]">
 			<CardHeader className="h-60 w-60">
 				<CardImage
 					src={

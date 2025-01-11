@@ -39,7 +39,7 @@ const CardCard = observer(({ card }: Props) => {
 	};
 
 	return (
-		<Card>
+		<Card className="w-60">
 			<CardHeader className="flex-row">
 				<CardImage
 					className="m-auto"
