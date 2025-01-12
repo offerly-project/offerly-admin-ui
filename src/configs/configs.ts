@@ -3,7 +3,7 @@ import axios from "axios";
 export const isProduction = import.meta.env.MODE === "production";
 
 export const BASE_URL = isProduction
-	? "http://offerly.me/api"
+	? "https://offerly.me/api"
 	: import.meta.env.VITE_API_BASE_URL;
 
 export const axiosInstance = axios.create({
