@@ -89,10 +89,10 @@ export class OffersStore {
 		if (this.query.search) {
 			offers = offers.filter(
 				(offer) =>
-					offer.offer_source_link.includes(this.query.search) ||
-					offer.title.en.includes(this.query.search) ||
-					offer.description.en.includes(this.query.search) ||
-					offer.terms_and_conditions.en.includes(this.query.search)
+					offer.title.en
+						.toLowerCase()
+						.includes(this.query.search.toLowerCase()) ||
+					offer.title.ar.toLowerCase().includes(this.query.search.toLowerCase())
 			);
 		}
 
