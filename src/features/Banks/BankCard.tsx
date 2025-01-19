@@ -11,10 +11,11 @@ import {
 	formatAssetPath,
 	formatBankType,
 } from "@/utils/utils";
-import { faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faBridge, faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
+import DeltaDialog from "../Delta/DeltaDialog";
 import BankForm, { BankFormValues } from "./BankForm";
 
 type Props = {
@@ -29,7 +30,8 @@ const BankCard = observer(({ bank }: Props) => {
 		await bank.updateStatus("disabled");
 	};
 
-	const [open, setOpen] = useState(false);
+	const [editOpen, setEditOpen] = useState(false);
+	const [deltaOpen, setDeltaOpen] = useState(false);
 
 	const { toast } = useToast();
 
@@ -37,7 +39,7 @@ const BankCard = observer(({ bank }: Props) => {
 		try {
 			await banksStore().updateBank(bank.id, values);
 			toast({ description: "Bank updated" });
-			setOpen(false);
+			setEditOpen(false);
 		} catch (e: any) {
 			toast(createErrorToastObject(e));
 		}
@@ -56,7 +58,7 @@ const BankCard = observer(({ bank }: Props) => {
 					}
 				/>
 			</CardHeader>
-			<CardContent className="space-y-4 ">
+			<CardContent className="space-y-4">
 				<p className=" font-bold text-xl">{bank.name.en}</p>
 				<p className=" text-gray-300">{bank.country}</p>
 				<p className=" text-gray-300">{formatBankType(bank.type)}</p>
@@ -67,7 +69,20 @@ const BankCard = observer(({ bank }: Props) => {
 				/>
 
 				<div className="justify-center flex">
-					<Dialog open={open} onOpenChange={(open) => setOpen(open)}>
+					{bank.scrapper_id && (
+						<Dialog
+							open={deltaOpen}
+							onOpenChange={(open) => setDeltaOpen(open)}
+						>
+							<DialogTrigger>
+								<Button variant={"ghost"}>
+									<FontAwesomeIcon icon={faBridge} />
+								</Button>
+							</DialogTrigger>
+							<DeltaDialog open={deltaOpen} scrapperId={bank.scrapper_id} />
+						</Dialog>
+					)}
+					<Dialog open={editOpen} onOpenChange={(open) => setEditOpen(open)}>
 						<DialogTrigger>
 							<Button variant={"ghost"} className="m-auto">
 								<FontAwesomeIcon icon={faEdit} />

@@ -8,6 +8,7 @@ export const BASE_URL = isProduction
 
 export const axiosInstance = axios.create({
 	baseURL: BASE_URL,
+	timeout: 10 * 60 * 1000,
 });
 
 export class AxiosAuthInterceptor {

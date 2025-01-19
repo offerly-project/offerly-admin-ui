@@ -13,6 +13,7 @@ export interface IBank {
 	status: ActiveStatusType;
 	cards: string[];
 	id: string;
+	scrapper_id: string;
 }
 
 export class Bank {
@@ -23,6 +24,7 @@ export class Bank {
 	status: ActiveStatusType;
 	cards: string[];
 	id: string;
+	scrapper_id: string;
 
 	constructor(bank: IBank) {
 		this.country = bank.country;
@@ -32,7 +34,7 @@ export class Bank {
 		this.status = bank.status;
 		this.cards = bank.cards;
 		this.id = bank.id;
-
+		this.scrapper_id = bank.scrapper_id;
 		makeAutoObservable(this);
 	}
 
