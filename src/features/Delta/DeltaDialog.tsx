@@ -1,6 +1,7 @@
 import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator";
 import { DialogContent } from "@/components/ui/dialog";
 import { axiosInstance } from "@/configs/configs";
+import { titleCase } from "@/utils/utils";
 import { useEffect, useState } from "react";
 
 type Props = { scrapperId: string; open: boolean };
@@ -66,7 +67,14 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								</p>
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.en.delta_added.length ? (
-										data.en.delta_added.map((item) => <p key={item}>{item}</p>)
+										data.en.delta_added.map((item, index) => (
+											<div
+												key={item}
+												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
+											>
+												{`${titleCase(item)}`}
+											</div>
+										))
 									) : (
 										<p className="text-gray-500 text-center">
 											No offers added.
@@ -81,8 +89,13 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								</p>
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.en.delta_removed.length ? (
-										data.en.delta_removed.map((item) => (
-											<p key={item}>{item}</p>
+										data.en.delta_removed.map((item, index) => (
+											<div
+												key={item}
+												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
+											>
+												{`${titleCase(item)}`}
+											</div>
 										))
 									) : (
 										<p className="text-gray-500 text-center">
@@ -105,7 +118,14 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								</p>
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.ar.delta_added.length ? (
-										data.ar.delta_added.map((item) => <p key={item}>{item}</p>)
+										data.ar.delta_added.map((item, index) => (
+											<div
+												key={item}
+												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
+											>
+												{`${titleCase(item)}`}
+											</div>
+										))
 									) : (
 										<p className="text-gray-500 text-center">
 											No offers added.
@@ -120,8 +140,13 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								</p>
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.ar.delta_removed.length ? (
-										data.ar.delta_removed.map((item) => (
-											<p key={item}>{item}</p>
+										data.ar.delta_removed.map((item, index) => (
+											<div
+												key={item}
+												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
+											>
+												{`${titleCase(item)}`}
+											</div>
 										))
 									) : (
 										<p className="text-gray-500 text-center">

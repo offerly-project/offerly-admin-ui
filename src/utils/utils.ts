@@ -51,3 +51,12 @@ export const numberValidator = (value: string | undefined) => {
 export const routeFmt = (route: string) => {
 	return ROUTE_PREFIX + route;
 };
+
+export const titleCase = (str: string) => {
+	return str
+		.split(" ")
+		.map((word) => {
+			return word.charAt(0).toUpperCase() + word.slice(1);
+		})
+		.join(" ");
+};
