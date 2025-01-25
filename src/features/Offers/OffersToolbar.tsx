@@ -4,7 +4,7 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { MultiSelect } from "@/components/ui/multiselect";
 import { CategoriesService } from "@/services/categories.service";
-import { cardsStore, offersStore } from "@/stores";
+import { banksStore, cardsStore, offersStore } from "@/stores";
 import { faAdd } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
@@ -15,9 +15,15 @@ type Props = {
 
 const OffersToolbar = observer(({ onAdd }: Props) => {
 	const cards = cardsStore().pureCards;
+	const banks = banksStore().pureBanks;
 
-	const { setCardsQuery, setCategoriesQuery, setSearchQuery, query } =
-		offersStore();
+	const {
+		setCardsQuery,
+		setCategoriesQuery,
+		setSearchQuery,
+		query,
+		setBanksQuery,
+	} = offersStore();
 	const categories = CategoriesService.categories;
 	return (
 		<Toolbar>
@@ -31,6 +37,15 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 				style={{ width: 250 }}
 				value={query.search}
 				onChange={(e) => setSearchQuery(e.target.value)}
+			/>
+			<MultiSelect
+				options={banks.map((bank) => ({
+					label: bank.name.en,
+					value: bank.id,
+				}))}
+				defaultValue={query.banks}
+				onValueChange={setBanksQuery}
+				placeholder="Banks"
 			/>
 			<MultiSelect
 				options={cards.map((card) => ({

@@ -10,6 +10,7 @@ type Query = {
 	cards: string[];
 	categories: string[];
 	search: string;
+	banks: string[];
 };
 
 export class OffersStore {
@@ -19,6 +20,7 @@ export class OffersStore {
 		cards: [],
 		categories: [],
 		search: "",
+		banks: [],
 	};
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
@@ -86,6 +88,12 @@ export class OffersStore {
 			);
 		}
 
+		if (this.query.banks.length) {
+			offers = offers.filter((offer) =>
+				this.query.banks.some((bank) => offer.bank.id === bank)
+			);
+		}
+
 		if (this.query.search) {
 			offers = offers.filter(
 				(offer) =>
@@ -105,6 +113,10 @@ export class OffersStore {
 
 	setCardsQuery = (cards: string[]) => {
 		this.query.cards = cards;
+	};
+
+	setBanksQuery = (banks: string[]) => {
+		this.query.banks = banks;
 	};
 
 	setCategoriesQuery = (categories: string[]) => {
