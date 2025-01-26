@@ -4,6 +4,28 @@ import { axiosInstance } from "@/configs/configs";
 import { titleCase } from "@/utils/utils";
 import { useEffect, useState } from "react";
 
+type OfferProps = {
+	title: string;
+};
+
+const Offer = ({ title }: OfferProps) => {
+	const [strike, setStrike] = useState(false);
+
+	const handleClick = () => {
+		setStrike(!strike);
+	};
+
+	return (
+		<div
+			onClick={handleClick}
+			className={`py-1 border-b border-[rgba(255,255,255,0.2)] ${
+				strike ? "line-through" : ""
+			} cursor-pointer`}
+		>
+			{`${titleCase(title)}`}
+		</div>
+	);
+};
 type Props = { scrapperId: string; open: boolean };
 
 interface IDelta {
@@ -68,12 +90,7 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.en.delta_added.length ? (
 										data.en.delta_added.map((item, index) => (
-											<div
-												key={item}
-												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
-											>
-												{`${titleCase(item)}`}
-											</div>
+											<Offer key={item} title={item} />
 										))
 									) : (
 										<p className="text-gray-500 text-center">
@@ -90,12 +107,7 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 								<div className="h-[60vh] overflow-y-auto">
 									{data?.en.delta_removed.length ? (
 										data.en.delta_removed.map((item, index) => (
-											<div
-												key={item}
-												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
-											>
-												{`${titleCase(item)}`}
-											</div>
+											<Offer key={item} title={item} />
 										))
 									) : (
 										<p className="text-gray-500 text-center">
