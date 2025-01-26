@@ -1,5 +1,11 @@
 import LoadingIndicator from "@/components/LoadingIndicator/LoadingIndicator";
 import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+} from "@/components/ui/select";
+import {
 	Sidebar,
 	SidebarContent,
 	SidebarGroup,
@@ -18,10 +24,12 @@ import {
 	faBank,
 	faCreditCard,
 	faGift,
+	faLocation,
 	faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
+import momentTz from "moment-timezone";
 import { useEffect, useState } from "react";
 import { Outlet, useNavigate } from "react-router-dom";
 
@@ -56,6 +64,8 @@ const PrivateLayout = observer((props: Props) => {
 			</div>
 		);
 	}
+
+	const timeZones = momentTz.tz.names();
 
 	return (
 		<SidebarProvider>
@@ -98,6 +108,19 @@ const PrivateLayout = observer((props: Props) => {
 											<span>Offers</span>
 										</SidebarMenuButton>
 									</SidebarMenuItem>
+									<Select onValueChange={userStore().updateTimezone}>
+										<SelectTrigger>
+											<FontAwesomeIcon icon={faLocation} className="mr-2" />
+											TZ {">"} {userStore().tz}
+										</SelectTrigger>
+										<SelectContent>
+											{timeZones.map((tz) => (
+												<SelectItem value={tz}>
+													{tz} {tz === userStore().tz && "(Current)"}
+												</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 									<SidebarMenuItem>
 										<SidebarMenuButton
 											style={{ height: 50 }}

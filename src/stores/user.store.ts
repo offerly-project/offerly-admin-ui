@@ -1,6 +1,6 @@
 import { AxiosAuthInterceptor, axiosInstance } from "@/configs/configs";
 import { AxiosResponse } from "axios";
-import { makeAutoObservable, runInAction } from "mobx";
+import { action, makeAutoObservable, runInAction } from "mobx";
 import { RootStore } from ".";
 
 interface IUser {
@@ -12,11 +12,17 @@ export class UserStore {
 	authenticated: boolean = false;
 	user: IUser = {} as IUser;
 	initialising: boolean = true;
+	tz: string = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
 	constructor(rootStore: RootStore) {
 		this.rootStore = rootStore;
 		makeAutoObservable(this);
 	}
+
+	@action
+	updateTimezone = (tz: string) => {
+		this.tz = tz;
+	};
 
 	initialize = async () => {
 		const token = localStorage.getItem("token");

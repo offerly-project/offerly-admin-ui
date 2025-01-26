@@ -2,9 +2,15 @@ import { axiosInstance } from "@/configs/configs";
 import { IOffer, Offer } from "@/entities/offer.entity";
 import { OfferFormValues } from "@/features/Offers/OfferForm";
 import { AxiosResponse } from "axios";
-import { isNumber } from "lodash";
+import { isNumber, omit } from "lodash";
 import { makeAutoObservable, runInAction } from "mobx";
+import momentTz from "moment-timezone";
 import { RootStore } from ".";
+
+type OfferPayload = Omit<OfferFormValues, "starting_date" | "expiry_date"> & {
+	starting_date?: Date;
+	expiry_date?: Date;
+};
 
 type Query = {
 	cards: string[];
@@ -46,8 +52,21 @@ export class OffersStore {
 	};
 
 	createOffer = async (data: OfferFormValues) => {
+		const tz = this.rootStore.userStore.tz;
+		const payload: OfferPayload = {
+			...omit(data, ["starting_date", "expiry_date"]),
+		};
+
+		if (data.starting_date) {
+			payload.starting_date = momentTz(data.starting_date).toDate();
+		}
+		if (data.expiry_date) {
+			const parsedDate = momentTz(data.expiry_date, "DD/MM/YYYY", true);
+			payload.expiry_date = parsedDate.tz(tz).toDate();
+		}
+
 		const id = await axiosInstance
-			.post("/admin/offers", data, {
+			.post("/admin/offers", payload, {
 				headers: {
 					"Content-Type": "application/json",
 				},
@@ -124,7 +143,19 @@ export class OffersStore {
 	};
 
 	updateOffer = async (id: string, data: OfferFormValues) => {
-		await axiosInstance.patch(`/admin/offers/${id}`, data);
+		const tz = this.rootStore.userStore.tz;
+		const payload: OfferPayload = {
+			...omit(data, ["starting_date", "expiry_date"]),
+		};
+		if (data.starting_date) {
+			payload.starting_date = momentTz(data.starting_date).tz(tz).toDate();
+		}
+		if (data.expiry_date) {
+			const parsedDate = momentTz(data.expiry_date, "DD/MM/YYYY", true);
+			payload.expiry_date = parsedDate.tz(tz).toDate();
+		}
+
+		await axiosInstance.patch(`/admin/offers/${id}`, payload);
 		const offer = await this.fetchOfferById(id);
 		runInAction(() => {
 			this._offers[id].updateOffer(offer);
