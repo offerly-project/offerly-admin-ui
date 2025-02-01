@@ -6,9 +6,16 @@ import { DialogContent } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multiselect";
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from "@/components/ui/select";
 import { expiryDateSchema, languagesSchema } from "@/constants/constants";
 import { CategoriesService } from "@/services/categories.service";
-import { cardsStore } from "@/stores";
+import { banksStore, cardsStore } from "@/stores";
 import { ChannelType } from "@/ts/api.types";
 import { numberValidator } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -43,6 +50,7 @@ const schema = z.object({
 		.min(1),
 	offer_source_link: z.string({ message: "Offer source link is required" }),
 	title: languagesSchema,
+	bankId: z.string({ message: "Bank is required" }),
 });
 
 export type OfferFormValues = z.infer<typeof schema>;
@@ -69,6 +77,7 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 		values: initialValues,
 	});
 
+	const { pureBanks } = banksStore();
 	const [uploading, setUploading] = useState(false);
 	const submittable = !uploading && isEmpty(formState.errors);
 
@@ -149,6 +158,19 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 					}
 					error={formState.errors.terms_and_conditions?.ar?.message}
 				/>
+				<Select
+					defaultValue={getValues().bankId}
+					onValueChange={(value) => setValue("bankId", value)}
+				>
+					<SelectTrigger>
+						<SelectValue placeholder="Bank" />
+					</SelectTrigger>
+					<SelectContent>
+						{pureBanks.map((item) => (
+							<SelectItem value={item.id}>{item.name.en}</SelectItem>
+						))}
+					</SelectContent>
+				</Select>
 				<MultiSelect
 					options={CHANNELS.map((channel) => ({
 						label: channel === "in-store" ? "In Store" : "Online",

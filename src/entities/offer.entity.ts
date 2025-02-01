@@ -15,6 +15,7 @@ export interface IOffer {
 	discount_code?: string;
 	logo?: string;
 	channels: ChannelType[];
+	bankId: string;
 	categories: string[];
 	applicable_cards: string[];
 	offer_source_link: string;
@@ -26,6 +27,7 @@ export interface IOffer {
 export class Offer {
 	id: string;
 	bank: Omit<IBank, "cards">;
+	bankId: string;
 	title: Translation;
 	terms_and_conditions: Translation;
 	starting_date?: Date;
@@ -58,6 +60,7 @@ export class Offer {
 		this.status = offer.status;
 		this.title = offer.title;
 		this.bank = offer.bank;
+		this.bankId = offer.bankId;
 		makeAutoObservable(this);
 	}
 	updateOffer(offer: IOffer) {
@@ -75,6 +78,7 @@ export class Offer {
 		this.offer_source_link = offer.offer_source_link;
 		this.status = offer.status;
 		this.title = offer.title;
+		this.bankId = offer.bankId;
 	}
 
 	updateStatus = async (status: ActiveStatusType) => {

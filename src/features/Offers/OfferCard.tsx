@@ -64,6 +64,8 @@ const OfferCard = observer(({ offer }: Props) => {
 
 	const onUpdateOfferSubmit = async (values: OfferFormValues) => {
 		try {
+			console.log(values);
+
 			await offersStore().updateOffer(offer.id, values);
 			toast({ description: "Offer updated" });
 			setOpen(false);
@@ -83,6 +85,8 @@ const OfferCard = observer(({ offer }: Props) => {
 	const onDelete = async () => {
 		await offersStore().deleteOffer(offer.id);
 	};
+
+	console.log(offer.bankId);
 
 	return (
 		<Card className="flex flex-row w-[45%]">
@@ -157,6 +161,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
 								channels: offer.channels,
+								bankId: offer.bankId,
 								categories: offer.categories,
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,
