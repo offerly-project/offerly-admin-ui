@@ -89,7 +89,7 @@ const OfferCard = observer(({ offer }: Props) => {
 	console.log(offer.bankId);
 
 	return (
-		<Card className="flex flex-row w-[45%]">
+		<Card className="flex flex-row w-[95%]">
 			<CardHeader className="h-60 w-60">
 				<CardImage
 					src={

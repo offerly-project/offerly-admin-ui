@@ -31,7 +31,12 @@ const Cards = observer((props: Props) => {
 				<CardsToolbar onAdd={() => setOpen(true)} />
 				<CardForm onSubmit={onNewCardSubmit} />
 			</Dialog>
-			<Grid>
+			<Grid
+				columnCount={3}
+				rowCount={Math.ceil(cards.length / 3)}
+				columnWidth={350}
+				rowHeight={550}
+			>
 				{cards.map((card) => (
 					<CardCard key={card.id} card={card} />
 				))}

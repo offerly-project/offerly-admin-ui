@@ -31,7 +31,12 @@ const Offers = observer((props: Props) => {
 				<OffersToolbar onAdd={() => setOpen(true)} />
 				<OfferForm onSubmit={onNewOfferSubmit} open={open} />
 			</Dialog>
-			<Grid>
+			<Grid
+				columnCount={2}
+				rowCount={Math.ceil(offers.length / 2)}
+				columnWidth={500}
+				rowHeight={400}
+			>
 				{offers.map((offer) => (
 					<OfferCard key={offer.id} offer={offer} />
 				))}

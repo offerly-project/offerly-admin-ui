@@ -32,7 +32,12 @@ const Banks = observer((props: Props) => {
 
 				<BankForm onSubmit={onNewBankSubmit} />
 			</Dialog>
-			<Grid>
+			<Grid
+				columnCount={3}
+				rowCount={Math.ceil(banks.length / 3)}
+				columnWidth={350}
+				rowHeight={500}
+			>
 				{banks.map((bank) => (
 					<BankCard key={bank.id} bank={bank} />
 				))}
