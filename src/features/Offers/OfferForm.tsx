@@ -72,6 +72,7 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 		clearErrors,
 		register,
 		reset,
+		setError,
 	} = useForm({
 		resolver: zodResolver(schema),
 		values: initialValues,
@@ -160,9 +161,11 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 				/>
 				<Select
 					defaultValue={getValues().bankId}
-					onValueChange={(value) => setValue("bankId", value)}
+					onValueChange={(value) => {
+						setValue("bankId", value, { shouldValidate: true });
+					}}
 				>
-					<SelectTrigger>
+					<SelectTrigger error={formState.errors.bankId?.message}>
 						<SelectValue placeholder="Bank" />
 					</SelectTrigger>
 					<SelectContent>
