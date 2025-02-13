@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 import { MultiSelect } from "@/components/ui/multiselect";
 import { expiryDateSchema, languagesSchema } from "@/constants/constants";
 import { CategoriesService } from "@/services/categories.service";
-import { banksStore, cardsStore } from "@/stores";
+import { cardsStore } from "@/stores";
 import { ChannelType } from "@/ts/api.types";
 import { numberValidator } from "@/utils/utils";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -70,7 +70,6 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 		values: initialValues,
 	});
 
-	const { pureBanks } = banksStore();
 	const [uploading, setUploading] = useState(false);
 	const submittable = !uploading && isEmpty(formState.errors);
 
