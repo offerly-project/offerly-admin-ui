@@ -32,7 +32,6 @@ type Props = { scrapperId: string; open: boolean };
 interface IDelta {
 	delta_added: string[];
 	delta_removed: string[];
-	delta_renamed: { from: string; to: string }[];
 }
 
 type DeltaData = {
@@ -118,28 +117,6 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 									)}
 								</div>
 							</div>
-							{/* Renamed Offers */}
-							<div className="w-full">
-								<p className="font-semibold text-center text-yellow-500">
-									Renamed
-								</p>
-								<div className="h-[60vh] overflow-y-auto">
-									{data?.en.delta_renamed.length ? (
-										data.en.delta_renamed.map(({ from, to }) => (
-											<div
-												key={from}
-												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
-											>
-												{`${titleCase(from)} → ${titleCase(to)}`}
-											</div>
-										))
-									) : (
-										<p className="text-gray-500 text-center">
-											No offers renamed.
-										</p>
-									)}
-								</div>
-							</div>
 						</div>
 					</div>
 
@@ -177,28 +154,6 @@ const DeltaDialog = ({ scrapperId, open }: Props) => {
 									) : (
 										<p className="text-gray-500 text-center">
 											No offers removed.
-										</p>
-									)}
-								</div>
-							</div>
-							{/* Renamed Offers */}
-							<div className="w-full">
-								<p className="font-semibold text-center text-yellow-500">
-									Renamed
-								</p>
-								<div className="h-[60vh] overflow-y-auto">
-									{data?.ar.delta_renamed.length ? (
-										data.ar.delta_renamed.map(({ from, to }) => (
-											<div
-												key={from}
-												className="py-1 border-b border-[rgba(255,255,255,0.2)]"
-											>
-												{`${titleCase(from)} → ${titleCase(to)}`}
-											</div>
-										))
-									) : (
-										<p className="text-gray-500 text-center">
-											No offers renamed.
 										</p>
 									)}
 								</div>
