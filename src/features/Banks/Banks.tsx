@@ -6,16 +6,16 @@ import { createErrorToastObject } from "@/utils/utils";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import BankCard from "./BankCard";
-import BankForm, { BankFormValues } from "./BankForm";
+import BankForm from "./BankForm";
 import BanksToolbar from "./BanksToobar";
 
 type Props = {};
 
 const Banks = observer((props: Props) => {
-	const { banks, updateFilter } = banksStore();
+	const { banks } = banksStore();
 	const [open, setOpen] = useState(false);
 	const { toast } = useToast();
-	const onNewBankSubmit = async (values: BankFormValues) => {
+	const onNewBankSubmit = async (values: any) => {
 		try {
 			await banksStore().createBank(values);
 			toast({ description: "Bank created" });

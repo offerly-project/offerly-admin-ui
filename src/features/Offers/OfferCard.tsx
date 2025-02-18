@@ -55,7 +55,7 @@ const OfferCard = observer(({ offer }: Props) => {
 	}, [offer.channels]);
 
 	const categoriesFmt = useMemo(() => {
-		return offer.categories.join(" - ");
+		return offer.categories.map((category) => category.name).join(" - ");
 	}, [offer.categories]);
 
 	const { toast } = useToast();
@@ -64,8 +64,6 @@ const OfferCard = observer(({ offer }: Props) => {
 
 	const onUpdateOfferSubmit = async (values: OfferFormValues) => {
 		try {
-			console.log(values);
-
 			await offersStore().updateOffer(offer.id, values);
 			toast({ description: "Offer updated" });
 			setOpen(false);
@@ -135,8 +133,8 @@ const OfferCard = observer(({ offer }: Props) => {
 					</p>
 				)} */}
 				<p className="text-gray-500">{dateFmt}</p>
-				{/* <p className="text-gray-500">Constraints: {constraintsFmt}</p> */}
-				{/* <p className="text-gray-500">Channel: {channelFmt}</p> */}
+				<p className="text-gray-500">Constraints: {constraintsFmt}</p>
+				<p className="text-gray-500">Channel: {channelFmt}</p>
 				<p className="text-gray-500">Categories: {categoriesFmt}</p>
 				<StatusSwitch
 					status={offer.status}
@@ -161,7 +159,7 @@ const OfferCard = observer(({ offer }: Props) => {
 								minimum_amount: offer.minimum_amount?.toString(),
 								cap: offer.cap?.toString(),
 								channels: offer.channels,
-								categories: offer.categories,
+								categories: offer.categories.map((category) => category.id),
 								logo: offer.logo,
 								applicable_cards: offer.applicable_cards,
 								title: offer.title,

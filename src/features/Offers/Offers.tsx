@@ -24,6 +24,7 @@ const Offers = observer((props: Props) => {
 			toast(createErrorToastObject(e));
 		}
 	};
+	console.log(offers);
 
 	return (
 		<div className="flex-col flex space-y-5">

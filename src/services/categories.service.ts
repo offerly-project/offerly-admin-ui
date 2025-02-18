@@ -6,15 +6,17 @@ export class CategoriesService {
 	static list: ListItem<string>[];
 	static populate = async () => {
 		if (!CategoriesService.categories) {
-			const response = await axiosInstance.get("/static/categories.json");
+			const response = await axiosInstance.get("/static/categories");
 			const data = response ? response.data : [];
 
 			CategoriesService.categories = data;
 
-			CategoriesService.list = data.map((category: string) => ({
-				value: category,
-				name: category,
-			}));
+			CategoriesService.list = data.map(
+				(category: { name: string; id: string }) => ({
+					value: category.id,
+					name: category.name,
+				})
+			);
 		}
 	};
 }

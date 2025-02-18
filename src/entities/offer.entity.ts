@@ -3,6 +3,7 @@ import { ActiveStatusType, ChannelType } from "@/ts/api.types";
 import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
 import { IBank } from "./bank.entity";
+import { ICategory } from "./entities";
 
 export interface IOffer {
 	id: string;
@@ -16,7 +17,7 @@ export interface IOffer {
 	logo?: string;
 	channels: ChannelType[];
 	bankId: string;
-	categories: string[];
+	categories: ICategory[];
 	applicable_cards: string[];
 	offer_source_link: string;
 	status: ActiveStatusType;
@@ -38,7 +39,7 @@ export class Offer {
 	discount_code?: string;
 	logo?: string;
 	channels: ChannelType[];
-	categories: string[];
+	categories: ICategory[];
 	applicable_cards: string[];
 	offer_source_link: string;
 	status: ActiveStatusType;

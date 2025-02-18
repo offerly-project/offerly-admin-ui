@@ -102,7 +102,7 @@ export class OffersStore {
 		if (this.query.categories.length) {
 			offers = offers.filter((offer) =>
 				this.query.categories.some((category) =>
-					offer.categories.includes(category)
+					offer.categories.find((cat) => cat.id === category)
 				)
 			);
 		}

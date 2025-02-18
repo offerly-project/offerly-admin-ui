@@ -24,7 +24,9 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 		query,
 		setBanksQuery,
 	} = offersStore();
-	const categories = CategoriesService.categories;
+	const categoriesList = CategoriesService.list;
+	console.log(categoriesList);
+
 	return (
 		<Toolbar>
 			<DialogTrigger>
@@ -57,9 +59,9 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 				placeholder="Cards"
 			/>
 			<MultiSelect
-				options={categories.map((category) => ({
-					label: category,
-					value: category,
+				options={categoriesList.map((category) => ({
+					label: category.name,
+					value: category.value,
 				}))}
 				defaultValue={query.categories}
 				placeholder="Categories"

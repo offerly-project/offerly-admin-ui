@@ -16,7 +16,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
 import DeltaDialog from "../Delta/DeltaDialog";
-import BankForm, { BankFormValues } from "./BankForm";
+import BankForm from "./BankForm";
 
 type Props = {
 	bank: Bank;
@@ -35,7 +35,7 @@ const BankCard = observer(({ bank }: Props) => {
 
 	const { toast } = useToast();
 
-	const onUpdateBankSubmit = async (values: BankFormValues) => {
+	const onUpdateBankSubmit = async (values: any) => {
 		try {
 			await banksStore().updateBank(bank.id, values);
 			toast({ description: "Bank updated" });
@@ -60,7 +60,7 @@ const BankCard = observer(({ bank }: Props) => {
 			</CardHeader>
 			<CardContent className="space-y-4">
 				<p className=" font-bold text-xl">{bank.name.en}</p>
-				<p className=" text-gray-300">{bank.country}</p>
+				<p className=" text-gray-300">{bank.country.name}</p>
 				<p className=" text-gray-300">{formatBankType(bank.type)}</p>
 				<StatusSwitch
 					status={bank.status}
@@ -91,7 +91,7 @@ const BankCard = observer(({ bank }: Props) => {
 						<BankForm
 							initialValues={{
 								name: bank.name,
-								country: bank.country,
+								country: bank.country.id,
 								type: bank.type,
 								logo: bank.logo,
 							}}

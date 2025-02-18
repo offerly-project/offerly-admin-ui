@@ -186,9 +186,9 @@ const OfferForm = ({ onSubmit, initialValues, open }: Props) => {
 					/>
 				</div>
 				<MultiSelect
-					options={categories.map((category) => ({
-						label: category,
-						value: category,
+					options={CategoriesService.list.map((category) => ({
+						label: category.name,
+						value: category.value,
 					}))}
 					defaultValue={getValues().categories}
 					onValueChange={(value) =>

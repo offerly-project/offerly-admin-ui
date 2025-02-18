@@ -2,11 +2,12 @@ import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType } from "@/ts/api.types";
 import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
+import { ICountry } from "./entities";
 
 export type BankType = "regular" | "digital" | "digital-wallet";
 
 export interface IBank {
-	country: string;
+	country: ICountry;
 	type: BankType;
 	name: Translation;
 	logo: string;
@@ -17,7 +18,7 @@ export interface IBank {
 }
 
 export class Bank {
-	country: string;
+	country: ICountry;
 	type: BankType;
 	name: Translation;
 	logo: string;
