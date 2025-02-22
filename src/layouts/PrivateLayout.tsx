@@ -17,7 +17,6 @@ import {
 	SidebarMenuItem,
 	SidebarProvider,
 } from "@/components/ui/sidebar";
-import { isProduction } from "@/configs/configs";
 import { banksStore, cardsStore, offersStore, userStore } from "@/stores";
 import {
 	faBank,
@@ -38,11 +37,7 @@ const PrivateLayout = observer((props: Props) => {
 	const { user } = userStore();
 	const navigate = useNavigate();
 	const routeHandler = (str: string) => () => {
-		if (!isProduction) {
-			navigate(str);
-		} else {
-			navigate(str);
-		}
+		navigate(str);
 	};
 	const [loading, setLoading] = useState(true);
 
