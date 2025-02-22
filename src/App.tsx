@@ -5,7 +5,6 @@ import {
 	Route,
 	RouterProvider,
 } from "react-router-dom";
-import { isProduction } from "./configs/configs";
 import Banks from "./features/Banks/Banks";
 import Cards from "./features/Cards/Cards";
 import Offers from "./features/Offers/Offers";
@@ -17,7 +16,7 @@ import { CategoriesService } from "./services/categories.service";
 import { CountriesService } from "./services/countries.service";
 import { routeFmt } from "./utils/utils";
 
-export const ROUTE_PREFIX = isProduction ? "/admin" : "/";
+export const ROUTE_PREFIX = "/";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
