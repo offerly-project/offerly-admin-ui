@@ -14,20 +14,17 @@ import PrivateRoute from "./routes/PrivateRoute";
 import PublicRoute from "./routes/PublicRoute";
 import { CategoriesService } from "./services/categories.service";
 import { CountriesService } from "./services/countries.service";
-import { routeFmt } from "./utils/utils";
-
-export const ROUTE_PREFIX = "/";
 
 const router = createBrowserRouter(
 	createRoutesFromElements(
-		<Route path={ROUTE_PREFIX} element={<RootLayout />}>
-			<Route path={ROUTE_PREFIX} element={<PrivateRoute />}>
-				<Route path={routeFmt("/banks")} element={<Banks />}></Route>
-				<Route path={routeFmt("/cards")} element={<Cards />}></Route>
-				<Route path={routeFmt("/offers")} element={<Offers />}></Route>
+		<Route element={<RootLayout />}>
+			<Route element={<PrivateRoute />}>
+				<Route path={"/banks"} element={<Banks />}></Route>
+				<Route path={"/cards"} element={<Cards />}></Route>
+				<Route path={"/offers"} element={<Offers />}></Route>
 			</Route>
-			<Route path={ROUTE_PREFIX} element={<PublicRoute />}>
-				<Route path={routeFmt("/login")} element={<LoginPage />}></Route>
+			<Route element={<PublicRoute />}>
+				<Route path={"/login"} element={<LoginPage />}></Route>
 			</Route>
 		</Route>
 	)
