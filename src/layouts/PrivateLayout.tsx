@@ -19,7 +19,6 @@ import {
 } from "@/components/ui/sidebar";
 import { isProduction } from "@/configs/configs";
 import { banksStore, cardsStore, offersStore, userStore } from "@/stores";
-import { routeFmt } from "@/utils/utils";
 import {
 	faBank,
 	faCreditCard,
@@ -42,7 +41,7 @@ const PrivateLayout = observer((props: Props) => {
 		if (!isProduction) {
 			navigate(str);
 		} else {
-			navigate(routeFmt(str));
+			navigate(str);
 		}
 	};
 	const [loading, setLoading] = useState(true);
