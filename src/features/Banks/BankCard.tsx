@@ -11,11 +11,10 @@ import {
 	formatAssetPath,
 	formatBankType,
 } from "@/utils/utils";
-import { faBridge, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { observer } from "mobx-react-lite";
 import { useState } from "react";
-import DeltaDialog from "../Delta/DeltaDialog";
 import BankForm from "./BankForm";
 
 type Props = {
@@ -69,7 +68,7 @@ const BankCard = observer(({ bank }: Props) => {
 				/>
 
 				<div className="justify-center flex">
-					{bank.scrapper_id && (
+					{/* {bank.scrapper_id && (
 						<Dialog
 							open={deltaOpen}
 							onOpenChange={(open) => setDeltaOpen(open)}
@@ -81,7 +80,7 @@ const BankCard = observer(({ bank }: Props) => {
 							</DialogTrigger>
 							<DeltaDialog open={deltaOpen} scrapperId={bank.scrapper_id} />
 						</Dialog>
-					)}
+					)} */}
 					<Dialog open={editOpen} onOpenChange={(open) => setEditOpen(open)}>
 						<DialogTrigger>
 							<Button variant={"ghost"} className="m-auto">
