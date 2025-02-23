@@ -2,7 +2,6 @@ import { axiosInstance } from "@/configs/configs";
 import { ActiveStatusType, ChannelType } from "@/ts/api.types";
 import { Translation } from "@/ts/helpers.types";
 import { makeAutoObservable, runInAction } from "mobx";
-import { IBank } from "./bank.entity";
 import { ICategory } from "./entities";
 
 export interface IOffer {
@@ -22,12 +21,10 @@ export interface IOffer {
 	offer_source_link: string;
 	status: ActiveStatusType;
 	title: Translation;
-	bank: Omit<IBank, "cards">;
 }
 
 export class Offer {
 	id: string;
-	bank: Omit<IBank, "cards">;
 	bankId: string;
 	title: Translation;
 	terms_and_conditions: Translation;
@@ -60,7 +57,6 @@ export class Offer {
 		this.offer_source_link = offer.offer_source_link;
 		this.status = offer.status;
 		this.title = offer.title;
-		this.bank = offer.bank;
 		this.bankId = offer.bankId;
 		makeAutoObservable(this);
 	}

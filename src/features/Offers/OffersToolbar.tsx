@@ -25,7 +25,6 @@ const OffersToolbar = observer(({ onAdd }: Props) => {
 		setBanksQuery,
 	} = offersStore();
 	const categoriesList = CategoriesService.list;
-	console.log(categoriesList);
 
 	return (
 		<Toolbar>

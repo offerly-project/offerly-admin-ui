@@ -108,8 +108,9 @@ export class OffersStore {
 		}
 
 		if (this.query.banks.length) {
+			console.log(this.query.banks, offers);
 			offers = offers.filter((offer) =>
-				this.query.banks.some((bank) => offer.bank.id === bank)
+				this.query.banks.some((bank) => offer.bankId === bank)
 			);
 		}
 
